@@ -1,0 +1,37 @@
+/* styles/toastify-overrides.css */
+.Toastify__toast {
+    font-family: Arial, sans-serif;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px 15px;
+}
+
+/* Style the progress bar */
+.Toastify__progress-bar {
+    background: #4caf50;
+    background-color: #4caf50;
+    height: 10px;
+}
+
+/* Style the close button */
+.Toastify__close-button {
+    color: #000000;
+    opacity: 0.8;
+}
+
+.Toastify__close-button:hover {
+    opacity: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+    @media (prefers-color-scheme: dark) {
+        .Toastify__toast {
+            background: #333333;
+            color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .Toastify__close-button {
+            color: #ffffff;
+        }
+    }
+}

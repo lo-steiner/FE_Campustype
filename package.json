@@ -1,0 +1,29 @@
+{
+  "name": "campus_news",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently --kill-others \"npm run lint-watch\" \"next dev\"",
+    "build": "concurrently --kill-others \"npm run lint-watch\" \"next build\"",
+    "start": "concurrently --kill-others \"npm run lint-watch\" \"next start\"",
+    "lint": "next lint",
+    "lint-watch": "nodemon --watch . --exec next lint",
+    "cypress:open": "cypress:open"
+  },
+  "dependencies": {
+    "concurrently": "^9.1.2",
+    "jwt-decode": "^4.0.0",
+    "materialize-css": "^1.0.0-rc.2",
+    "next": "15.2.4",
+    "nodemon": "^3.1.9",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-toastify": "^11.0.5"
+  },
+  "devDependencies": {
+    "cypress": "^14.2.1",
+    "eslint": "9.23.0",
+    "eslint-config-next": "15.2.4"
+  }
+}
