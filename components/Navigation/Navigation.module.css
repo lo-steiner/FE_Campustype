@@ -1,0 +1,107 @@
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    z-index: 100;
+}
+
+.navIcon {
+    width: 60px;
+    height: 45px;
+    position: relative;
+    cursor: pointer;
+    display: none;
+}
+
+.navIcon span {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 50%;
+    background: #171717;
+    transition: all 0.3s ease;
+    right: 0;
+}
+
+.navIcon span:nth-child(1) {
+    top: 14px;
+}
+
+.navIcon span:nth-child(2),
+.navIcon span:nth-child(3) {
+    top: 22px;
+}
+
+.navIcon span:nth-child(4) {
+    top: 30px;
+}
+
+.navIcon.open span:nth-child(1) {
+    top: 22px;
+    width: 0;
+    left: 50%;
+}
+
+.navIcon.open span:nth-child(2) {
+    transform: rotate(45deg);
+}
+
+.navIcon.open span:nth-child(3) {
+    transform: rotate(-45deg);
+}
+
+.navIcon.open span:nth-child(4) {
+    top: 22px;
+    width: 0;
+    left: 50%;
+}
+
+.links {
+    display: flex;
+    gap: 1rem;
+}
+
+.links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.links li {
+    margin: 0 0.5rem;
+}
+
+.links a {
+    text-decoration: none;
+    color: #333;
+}
+
+.links a:hover {
+    color: #7a7a7a;
+    font-weight: 500;
+}
+
+@media (prefers-color-scheme: dark) {
+    .links a {
+        text-decoration: none;
+        color: #ffffff;
+    }
+    .navIcon span {
+        background: #ffffff;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .links a {
+        display: none;
+    }
+    .navIcon {
+        display: block;
+    }
+    .nav {
+        padding: 0;
+    }
+}
