@@ -3,6 +3,7 @@ import Link from 'next/link';
 import styles from './Navigation.module.css';
 import { useGlobalContext } from  "../../store/index.js";
 import NavigationMobile from "../Navigation/NavigationMobile";
+import {Bounce, toast} from "react-toastify";
 
 const Navigation = () => {
     const { session, login, logout } = useGlobalContext();
@@ -12,6 +13,11 @@ const Navigation = () => {
     const handleClick = () => {
         setIsOpen(!isOpen);
     };
+
+    const handleLogout = () => {
+        logout();
+        toast.success("Logout successfull!", { transition: Bounce });
+    }
 
     useEffect(() => {
         setIsClient(true);
@@ -34,7 +40,7 @@ const Navigation = () => {
                         <li><Link href="/login">Login</Link></li>
                     )}
                     {session && (
-                        <li><Link href="/" onClick={() => logout()}>Logout</Link></li>
+                        <li><Link href="/" onClick={() => handleLogout()}>Logout</Link></li>
                     )}
                     <li><Link href="/aboutus">About Us</Link></li>
                 </ul>
