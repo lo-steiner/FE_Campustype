@@ -1,0 +1,64 @@
+.navTab {
+    background-color: #ffffff;
+    color: black;
+    width: 250px;
+    position: fixed;
+    top: 83px;
+    bottom: 0;
+    display: none;
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(7, 50px);
+    gap: 10px;
+    transition: 0.5s;
+    overflow-y: auto;
+    right: -700px;
+    z-index: 150;
+}
+
+.navTab.open {
+    right: 0;
+}
+
+.navTabLinks {
+    color: black;
+    padding: 20px;
+    text-align: center;
+    align-content: center;
+    width: 100%;
+}
+
+.navTab .navTabLinks:hover {
+    background-color: #dfdfdf;
+}
+
+.navTab::-webkit-scrollbar {
+    width: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+    .navTab .navTabLinks {
+        color: #ffffff;
+    }
+    .navTab .navTabLinks:hover {
+        color: #ffffff;
+        background-color: #373737;
+    }
+    .navTab {
+        background-color: #1e1e1e;
+        color: white;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .nav {
+        display: block;
+    }
+    .navTab {
+        display: grid;
+        width: 100%;
+        justify-content: center;
+    }
+    .navTab.open {
+        right: 0;
+    }
+}
