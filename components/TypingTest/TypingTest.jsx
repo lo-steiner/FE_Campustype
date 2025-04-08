@@ -21,17 +21,8 @@ const TypingTest = ({ wordCount = 10 }) => {
         cpm: "",
         time: "",
         words: "",
-        characters: ""
-    });
-    const [resultData, setResultData] = useState({
-        user_id: "",
-        acc: "",
-        raw: "",
-        wpm: "",
-        cpm: "",
-        time: "",
-        words: "",
-        sentence: '',
+        characters: "",
+        sentence: "",
         timestamp: ""
     });
     const [showResults, setShowResults] = useState(false);
@@ -153,28 +144,16 @@ const TypingTest = ({ wordCount = 10 }) => {
             cpm: cpm,
             time: Math.round(count * 100) / 100,
             words: wordCount,
-            characters: (incorrect + correct)
+            characters: (incorrect + correct),
+            sentence: displayLetters,
+            timestamp: Date.now().toString()
         });
 
         if(session) {
-            if(results.wpm > 1) {
-                setResultData({
-                    user_id: session.userId,
-                    acc: results.acc,
-                    raw: results.raw,
-                    wpm: results.wpm,
-                    cpm: results.cpm,
-                    time: results.time,
-                    words: results.words,
-                    sentence: displayLetters,
-                    timestamp: Date.now()
-                });
 
-                const response = TypingResultAPI.saveResult(resultData, session.accessToken)
-            }
+                const response = TypingResultAPI.saveResult(results, session.accessToken)
         }
 
-        const response = TypingResultAPI.saveResult(resultData)
         setShowResults(true);
     };
 
