@@ -1,0 +1,98 @@
+.container {
+    position: relative;
+    width: 100%;
+    min-height: 200px;
+}
+
+.viewContainer {
+    position: relative;
+    width: 100%;
+}
+
+.typingView,
+.resultsView {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    transition: all 0.5s ease;
+}
+
+.typingView {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.resultsView {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+.showResults .typingView {
+    opacity: 0;
+    transform: translateX(-100%);
+}
+
+.showResults .resultsView {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.showTyping .typingView {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.showTyping .resultsView {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+.generatedText {
+    font-size: 1.2rem;
+    white-space: pre-wrap;
+    position: relative;
+    animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.wrong {
+    color: #d33300;
+}
+
+.default {
+    color: #85B8FF;
+}
+
+.correct {
+    color: #000000;
+}
+
+.cursor {
+    position: absolute;
+    min-width: 2px;
+    width: 2px;
+    background-color: #000000;
+    transition: left 0.1s ease-out;
+}
+
+.displayResult {
+}
+
+@media (prefers-color-scheme: dark) {
+    .default {
+        color: #484848;
+    }
+
+    .correct {
+        color: white;
+    }
+
+    .cursor {
+        background-color: #85B8FF;
+    }
+}
