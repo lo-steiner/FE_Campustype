@@ -69,18 +69,46 @@ const LoginForm = ({ post }) => {
         setIsLoading(true);
 
         try {
-            await UsersAPI.register({ username: user.username, email: user.email, password: user.password });
-            const response = await UsersAPI.login({email: user.email, password: user.password });
-            if (!response) return;
+            const registerResponse = await UsersAPI.register({
+                username: user.username,
+                email: user.email,
+                password: user.password,
+            });
 
-            login(response);
+            const loginResponse = await UsersAPI.login({
+                email: user.email,
+                password: user.password,
+            });
+
+            if (!loginResponse || typeof loginResponse !== "object") {
+                throw new Error("Login failed: Invalid response format");
+            }
+
+            login(loginResponse);
             toast.success("Register successful!", { transition: Bounce });
             router.push("/");
         } catch (err) {
-            setErrors({ username: "Invalid Credentials", email: "Invalid Credentials", password: "Invalid Credentials", passwordConfirm: "" });
-            toast.error("Invalid Credentials", { transition: Bounce });
+            console.error("Error during registration/login:", err.message, err.response?.status);
+            let errorMessage = "An error occurred";
+            if (err.response) {
+                const status = err.response.status;
+                if (status === 400) errorMessage = "Bad request - check your input";
+                else if (status === 401) errorMessage = "Login failed - account may not be active";
+                else if (status === 409) errorMessage = "User already exists";
+                else errorMessage = `Server error: ${status}`;
+            } else {
+                errorMessage = err.message;
+            }
+            setErrors({
+                username: errorMessage,
+                email: errorMessage,
+                password: errorMessage,
+                passwordConfirm: "",
+            });
+            toast.error(errorMessage, { transition: Bounce });
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     };
 
     const handleChange = (e) => {

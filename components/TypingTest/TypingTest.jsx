@@ -99,7 +99,7 @@ const TypingTest = ({ wordCount = 10 }) => {
 
     const resetTest = () => {
         setResults({
-            acc: "",
+            accuracy: "",
             raw: "",
             wpm: "",
             cpm: "",
@@ -167,7 +167,7 @@ const TypingTest = ({ wordCount = 10 }) => {
             resetTest();
             if (showResults) {
                 setShowResults(false);
-            } else if (results.acc !== "") {
+            } else if (results.accuracy !== "") {
                 setShowResults(true);
             }
             return;

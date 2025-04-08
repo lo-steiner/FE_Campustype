@@ -4,12 +4,21 @@ import styles from './styles.module.css'
 
 const STORAGE_KEY = 'session'
 
-export default function leaderboard() {
+export default function Leaderboard() {
     const[ users, setUsers ] = useState([]);
     const months = [
         "Januar", "Februar", "März", "April", "Mai", "Juni",
         "Juli", "August", "September", "Oktober", "November", "Dezember"
     ];
+
+    const getUsername = () => {
+        const storedData = localStorage.getItem(STORAGE_KEY);
+        if (storedData) {
+            const sessionData = JSON.parse(storedData);
+            return sessionData.username;
+        }
+        return null;
+    };
 
     const getUsername = () => {
         const storedData = localStorage.getItem(STORAGE_KEY);
@@ -33,7 +42,7 @@ export default function leaderboard() {
     }, [])
 
     console.log(users)
-    
+
     return (
         <div className={styles.leaderboardContainer}>
           <h1 className={styles.leaderboardTitle}>LEADERBOARD</h1>
@@ -70,6 +79,7 @@ export default function leaderboard() {
               })}
             </ul>
           )}
+
         </div>
       );
 }
