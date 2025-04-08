@@ -77,6 +77,14 @@
     color: #000000;
 }
 
+.cursorActive {
+    position: absolute;
+    min-width: 2px;
+    width: 2px;
+    background-color: #000000;
+    transition: left 0.1s ease-out;
+}
+
 .cursor {
     position: absolute;
     min-width: 2px;
