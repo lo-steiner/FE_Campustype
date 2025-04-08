@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import LeaderboardAPI from "../../lib/api/Leaderboard.js";
 import styles from './styles.module.css'
+import { hydrateRoot } from "react-dom/client";
 
 const STORAGE_KEY = 'session'
 
@@ -10,15 +11,6 @@ export default function Leaderboard() {
         "Januar", "Februar", "März", "April", "Mai", "Juni",
         "Juli", "August", "September", "Oktober", "November", "Dezember"
     ];
-
-    const getUsername = () => {
-        const storedData = localStorage.getItem(STORAGE_KEY);
-        if (storedData) {
-            const sessionData = JSON.parse(storedData);
-            return sessionData.username;
-        }
-        return null;
-    };
 
     const getUsername = () => {
         const storedData = localStorage.getItem(STORAGE_KEY);
@@ -41,7 +33,6 @@ export default function Leaderboard() {
         getUsers()
     }, [])
 
-    console.log(users)
 
     return (
         <div className={styles.leaderboardContainer}>
@@ -67,6 +58,7 @@ export default function Leaderboard() {
                         ? styles.currentUser
                         : styles.rangElement
                     }
+                    onClick={() => window.location.href = `/run/${user.id}`}
                   >
                     <h2 className={styles.rangTitle}>
                       {i + 1} {user.user.username}
