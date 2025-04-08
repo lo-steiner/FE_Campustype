@@ -15,7 +15,7 @@ const TypingTest = ({ wordCount = 10 }) => {
     const [count, setCount] = useState(0);
     const [isActive, setIsActive] = useState(false);
     const [results, setResults] = useState({
-        acc: "",
+        accuracy: "",
         raw: "",
         wpm: "",
         cpm: "",
@@ -137,8 +137,8 @@ const TypingTest = ({ wordCount = 10 }) => {
         const acc = Math.round(accInDec * 100);
         const wpm = Math.round((wordCount / timeInMinutes) * accInDec) || 0;
 
-        setResults({
-            acc: acc,
+        const newResults = {
+            accuracy: acc,
             raw: Math.round(wordCount / timeInMinutes),
             wpm: wpm,
             cpm: cpm,
@@ -146,15 +146,19 @@ const TypingTest = ({ wordCount = 10 }) => {
             words: wordCount,
             characters: (incorrect + correct),
             sentence: displayLetters,
-            timestamp: Date.now().toString()
-        });
+            timestamp: Date.now()
+        };
 
-        if(session) {
+        console.log("Calculated Results:", newResults);
 
-                const response = TypingResultAPI.saveResult(results, session.accessToken)
-        }
-
+        setResults(newResults);
         setShowResults(true);
+
+        if (session) {
+            TypingResultAPI.saveResult(newResults, session.accessToken)
+                .then(response => console.log("API Response:", response))
+                .catch(error => console.error("API Error:", error));
+        }
     };
 
     const handleKeyDown = (e) => {
@@ -215,7 +219,7 @@ const TypingTest = ({ wordCount = 10 }) => {
                         <p>Raw WPM: {results.raw}</p>
                         <p>WPM: {results.wpm}</p>
                         <p>CPM: {results.cpm}</p>
-                        <p>Accuracy: {results.acc}%</p>
+                        <p>Accuracy: {results.accuracy}%</p>
                         <p>Time: {results.time}</p>
                         <p>Words: {results.words}</p>
                         <p>Characters: {results.characters}</p>
