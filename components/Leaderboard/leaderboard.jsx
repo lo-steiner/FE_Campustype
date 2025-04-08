@@ -21,23 +21,29 @@ export default function leaderboard() {
     console.log(users)
     
     return (
-        <div>
-            <h1>Leaderboard</h1>
+        <div className={styles.leaderboardContainer}>
+            <h1 className={styles.leaderboardTitle}>LEADERBOARD</h1>
             {users.length > 0 && (
-                <ul>
-                    {
-                        users.map((user, i) => (
-                            <li key={user.id} className={styles.rangElement}>
-                                <h3>{i + 1}</h3>
-                                <h2>{user.user.username}</h2>
-                                <h3>WPM: {user.wpm}</h3>
-                                <h3>Accuracy: {user.accuracy}%</h3>
-                                <h3>{user.timestamp}</h3>
-                            </li>
-                        ))
+                <ul className={styles.leaderboardList}>
+                {users.map((user, i) => (
+                  <li
+                    key={user.id}
+                    className={
+                      localStorage.getItem("username") === user.username
+                        ? styles.currentUser
+                        : styles.rangElement
                     }
-                </ul>
+                  >
+                    <h2 className={styles.rangTitle}>
+                      {i + 1} {user.user.username}
+                    </h2>
+                    <h3 className={styles.rangStat}>WPM: {user.wpm}</h3>
+                    <h3 className={styles.rangStat}>Accuracy: {user.accuracy}%</h3>
+                    <h3 className={styles.rangStat}>{user.timestamp}</h3>
+                  </li>
+                ))}
+              </ul>
             )}
         </div>
-    )
+    );
 }

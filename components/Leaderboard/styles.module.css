@@ -1,9 +1,73 @@
+
+.leaderboardContainer {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    background-color: #1a1a1a;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.leaderboardTitle {
+    color: #ffffff;
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    letter-spacing: 4px;
+    background: linear-gradient(90deg, #143763, #4876a9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.leaderboardList {
+    list-style: none;
+    padding: 0;
+}
+
 .rangElement {
-    display: flex;
-    padding: 10px;
-
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    background-color: #2c2c2c;
+    margin: 10px 0;
+    padding: 20px 25px;
+    border-radius: 10px;
+    transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
-.rangElement h3 {
-    padding: 0 20px 0 20px;
+.currentUser {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    background-color: #43c227;
+    margin: 10px 0;
+    padding: 20px 25px;
+    border-radius: 10px;
+    transition: transform 0.2s ease, background-color 0.3s ease;
 }
+
+.rangElement:hover {
+    transform: translateY(-2px);
+    background-color: #3a3a3a;
+}
+
+.rangTitle {
+    font-size: 1.2rem;
+    color: #6391c2;
+    font-weight: bold;
+}
+
+.rangStat {
+    padding: 0 20px;
+    font-size: 1rem;
+    color: #e0e0e0;
+    font-weight: normal;
+}
+
+.rangElement:first-child {
+    background: linear-gradient(90deg, #0b3669, #4174aa);
+    color: #fff;
+}
+
+
