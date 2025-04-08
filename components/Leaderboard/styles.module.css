@@ -52,6 +52,11 @@
     background-color: #3a3a3a;
 }
 
+.currentUser:hover {
+    transform: translateY(-2px);
+    background-color: #3a3a3a;
+}
+
 .rangTitle {
     font-size: 1.2rem;
     color: #6391c2;
@@ -65,6 +70,8 @@
     font-weight: normal;
 }
 
+
+
 .rangElement:first-child {
     background: linear-gradient(90deg, #0b3669, #4174aa);
     color: #fff;
@@ -73,9 +80,4 @@
 .currentUser:first-child {
     background: linear-gradient(90deg, #0b3669, #4174aa);
     color: #fff;
-}
-
-.currentUser:hover {
-    transform: translateY(-2px);
-    background-color: #3a3a3a;
 }
