@@ -51,8 +51,13 @@
 .generatedText {
     font-size: 1.2rem;
     white-space: pre-wrap;
-    position: relative;
     animation: fadeIn 1s;
+}
+
+@keyframes cursorFade {
+    100% { opacity: 0; }
+    50% { opacity: 1; }
+    0% { opacity: 0; }
 }
 
 @keyframes fadeIn {

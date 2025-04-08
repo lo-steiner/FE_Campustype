@@ -1,10 +1,15 @@
 import { useEffect, useState, useRef } from "react";
 import styles from "./TypingTest.module.css";
 import WordsAPI from "../../lib/api/Words.js";
+import TypingResultAPI from "../../lib/api/TypingResult.js";
+import {useGlobalContext} from "../../store/index.js";
 
 let Words = null;
 
 const TypingTest = ({ wordCount = 10 }) => {
+    const stopTimer = () => setIsActive(false);
+    const startTimer = () => setIsActive(true);
+    const { session, login, logout } = useGlobalContext();
     const [displayLetters, setDisplayLetters] = useState("");
     const [userLetters, setUserLetters] = useState("");
     const [count, setCount] = useState(0);
@@ -17,6 +22,17 @@ const TypingTest = ({ wordCount = 10 }) => {
         time: "",
         words: "",
         characters: ""
+    });
+    const [resultData, setResultData] = useState({
+        user_id: "",
+        acc: "",
+        raw: "",
+        wpm: "",
+        cpm: "",
+        time: "",
+        words: "",
+        sentence: '',
+        timestamp: ""
     });
     const [showResults, setShowResults] = useState(false);
     const textRef = useRef(null);
@@ -72,7 +88,6 @@ const TypingTest = ({ wordCount = 10 }) => {
         return () => clearInterval(interval);
     }, [isActive]);
 
-    // Update cursor position with smooth transition
     useEffect(() => {
         if (!textRef.current || !cursorRef.current || showResults) return;
 
@@ -90,8 +105,6 @@ const TypingTest = ({ wordCount = 10 }) => {
         }
     }, [userLetters, displayLetters, showResults]);
 
-    const stopTimer = () => setIsActive(false);
-    const startTimer = () => setIsActive(true);
 
     const resetTest = () => {
         setResults({
@@ -142,6 +155,26 @@ const TypingTest = ({ wordCount = 10 }) => {
             words: wordCount,
             characters: (incorrect + correct)
         });
+
+        if(session) {
+            if(results.wpm > 1) {
+                setResultData({
+                    user_id: session.userId,
+                    acc: results.acc,
+                    raw: results.raw,
+                    wpm: results.wpm,
+                    cpm: results.cpm,
+                    time: results.time,
+                    words: results.words,
+                    sentence: displayLetters,
+                    timestamp: Date.now()
+                });
+
+                const response = TypingResultAPI.saveResult(resultData, session.accessToken)
+            }
+        }
+
+        const response = TypingResultAPI.saveResult(resultData)
         setShowResults(true);
     };
 
