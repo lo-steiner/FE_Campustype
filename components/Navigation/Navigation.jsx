@@ -33,7 +33,7 @@ const Navigation = () => {
             </div>
             <div className={styles.links}>
                 <ul>
-                    <li><Link href="/">Leaderboard</Link></li>
+                    <li><Link href="/leaderboard">Leaderboard</Link></li>
                     {session ? (
                         <li><Link href="/profile">Profile</Link></li>
                     ) : (

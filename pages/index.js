@@ -28,21 +28,18 @@ export default function Home() {
     }
   };
 
-  // Load random letters on component mount
   useEffect(() => {
     generateRandomLetters(wordsCount).then((result) => {
       setDisplayLetters(result);
     });
   }, []);
 
-  // Check if user has finished typing
   useEffect(() => {
     if (userLetters.length === displayLetters.length && userLetters.length > 0) {
       handleFinish();
     }
   }, [userLetters, displayLetters]);
 
-  // Timer logic
   useEffect(() => {
     if (!isActive) return;
 
@@ -107,7 +104,13 @@ export default function Home() {
       addLetter(e.key);
       e.preventDefault();
     }
-
+    if (e.key === 'Backspace') {
+      setUserLetters(userLetters.slice(0, -1));
+      if (userLetters.length === 1) {
+        stopTimer();
+      }
+      e.preventDefault();
+    }
     if (e.key === 'Tab') {
       e.preventDefault();
       randomLetters();
