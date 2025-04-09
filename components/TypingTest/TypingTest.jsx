@@ -10,6 +10,7 @@ const TypingTest = ({ wordCount = 10 }) => {
     const stopTimer = () => setIsActive(false);
     const startTimer = () => setIsActive(true);
     const { session, login, logout } = useGlobalContext();
+    const [wrongChars, setWrongChars] = useState([]);
     const [displayLetters, setDisplayLetters] = useState("");
     const [userLetters, setUserLetters] = useState("");
     const [count, setCount] = useState(0);
@@ -116,10 +117,19 @@ const TypingTest = ({ wordCount = 10 }) => {
         stopTimer();
         let correct = 0;
         let incorrect = 0;
+        const wrongPositions = [];  // Track wrong characters with positions
 
         displayLetters.split("").forEach((char, i) => {
-            if (userLetters[i] === char) correct += 1;
-            else incorrect += 1;
+            if (userLetters[i] === char) {
+                correct += 1;
+            } else {
+                incorrect += 1;
+                wrongPositions.push({
+                    position: i,
+                    expected: char,
+                    typed: userLetters[i] || null
+                });
+            }
         });
 
         const timeInMinutes = count / 60;
@@ -141,6 +151,7 @@ const TypingTest = ({ wordCount = 10 }) => {
             timestamp: Date.now()
         };
 
+        setWrongChars(wrongPositions);
         setResults(newResults);
         setShowResults(true);
 
@@ -191,6 +202,9 @@ const TypingTest = ({ wordCount = 10 }) => {
 
     return (
         <div className={styles.container}>
+            <div>
+
+            </div>
             <div className={`${styles.viewContainer} ${showResults ? styles.showResults : styles.showTyping}`}>
                 <div className={styles.typingView}>
                     <div className={styles.generatedText} ref={textRef} key={displayLetters}>
@@ -207,6 +221,11 @@ const TypingTest = ({ wordCount = 10 }) => {
                         })}
                         {!showResults && <div ref={cursorRef} className={styles.cursor}></div>}
                     </div>
+                    {!session &&
+                        <div className={styles.infoContainer}>
+                            <i className="material-icons">info_outline</i>
+                            <p> You have to be logged in, to save your results! </p>
+                        </div>}
                 </div>
                 <div className={styles.resultsView}>
                     <div className={styles.displayResult}>
@@ -217,24 +236,21 @@ const TypingTest = ({ wordCount = 10 }) => {
                             </div>
                             <div>
                                 <h2>
-                                    {results.sentence ? (
-                                        results.sentence.split("").map((char, i) => {
-                                            const userChar = results.userInput[i];
-                                            const isCorrect = userChar === char;
-                                            if (char === " " && userChar && !isCorrect) {
-                                                return (
-                                                    <span key={i} className={styles.wrongSpace}> _ </span>
-                                                );
-                                            }
+                                    {results.sentence.split("").map((char, i) => {
+                                        const userChar = results.userInput[i];
+                                        const isCorrect = userChar === char;
+                                        if (char === " " && userChar && !isCorrect) {
                                             return (
-                                                <span key={i} className={userChar ? (isCorrect ? styles.correct : styles.wrong) : styles.default}>
-                                                    {char}
-                                                </span>
+                                                <span key={i} className={styles.wrongSpace}> _ </span>
                                             );
-                                        })
-                                    ) : (
-                                        "No sentence available"
-                                    )}
+                                        }
+                                        return (
+                                            <span key={i} className={userChar ? (isCorrect ? styles.correct : styles.wrong) : styles.default}>
+                                                {char}
+                                            </span>
+                                        );
+                                    })
+                                    }
                                 </h2>
                             </div>
                         </div>

@@ -24,14 +24,12 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    @media (prefers-color-scheme: dark) {
-        .Toastify__toast {
-            background: #333333;
-            color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .Toastify__close-button {
-            color: #ffffff;
-        }
+    .Toastify__toast {
+        background: #333333;
+        color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .Toastify__close-button {
+        color: #ffffff;
     }
 }
