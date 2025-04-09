@@ -17,7 +17,7 @@ const Layout = ({ children }) => {
             <main className={styles.content}>
                 {children}
                 <ToastContainer
-                    position="top-right"
+                    position="top-left"
                     autoClose={3000}
                     hideProgressBar={false}
                     closeOnClick={true}

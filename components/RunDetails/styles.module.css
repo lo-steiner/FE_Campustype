@@ -47,7 +47,7 @@
 }
 
 .correct {
-    color: #000000;
+    color: white;
 }
 
 .cursorActive {
@@ -115,16 +115,40 @@
     cursor: pointer;
 }
 
-@media (prefers-color-scheme: dark) {
-    .default {
-        color: #484848;
+@media (prefers-color-scheme: light) {
+    .cursor {
+        background-color: #85B8FF;
     }
 
-    .correct {
+    .settingsIcons {
+        color: white;
+        background-color: #85B8FF;
+    }
+    .infoContainer {
+        color: #85B8FF;
+    }
+
+    .topResults {
+        color: white;
+        background-color: #85B8FF;
+    }
+    .topResults h3 {
+        font-size: 1.5rem;
         color: white;
     }
 
-    .cursor {
-        background-color: #85B8FF;
+    .bottomResults h3 {
+        font-size: 1rem;
+        color: #85B8FF;
+    }
+    .topResults .correct {
+        color: white;
+    }
+
+    .correct {
+        color: black;
+    }
+    .default {
+        color: #85B8FF;
     }
 }

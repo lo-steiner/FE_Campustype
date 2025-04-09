@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import styles from './Navigation.module.css';
-import { useGlobalContext } from  "../../store/index.js";
+import { useGlobalContext } from "../../store/index.js";
 import NavigationMobile from "../Navigation/NavigationMobile";
 import {Bounce, toast} from "react-toastify";
 
@@ -17,6 +17,7 @@ const Navigation = () => {
     const handleLogout = () => {
         logout();
         toast.success("Logout successfull!", { transition: Bounce });
+        setIsOpen(false);
     }
 
     useEffect(() => {
@@ -45,7 +46,8 @@ const Navigation = () => {
                     <li><Link href="/aboutus">About Us</Link></li>
                 </ul>
             </div>
-            <NavigationMobile isOpen={isOpen}/>
+            <NavigationMobile isOpen={isOpen} setIsOpen={setIsOpen}
+            />
         </nav>
     );
 };
