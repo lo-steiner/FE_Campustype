@@ -1,0 +1,130 @@
+.container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    min-height: 200px;
+}
+
+.viewContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.typingView,
+.resultsView {
+    position: absolute;
+    transition: all 0.5s ease;
+}
+
+.generatedText {
+    font-size: 2rem;
+    white-space: pre-wrap;
+    animation: fadeIn 0.5s;
+    text-align: center;
+}
+
+@keyframes cursorFade {
+    100% { opacity: 0; }
+    50% { opacity: 1; }
+    0% { opacity: 0; }
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.wrong {
+    color: #d33300;
+}
+
+.wrongSpace {
+    color: #d33300;
+}
+
+.default {
+    color: #85B8FF;
+}
+
+.correct {
+    color: #000000;
+}
+
+.cursorActive {
+    position: absolute;
+    min-width: 2px;
+    width: 2px;
+    background-color: #000000;
+    transition: left 0.1s ease-out;
+}
+
+.cursor {
+    position: absolute;
+    min-width: 2px;
+    width: 2px;
+    background-color: #000000;
+    transition: left 0.1s ease-out;
+}
+
+.displayResult {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 30px
+}
+
+.topResults {
+    margin-top: 20px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    background-color: #1a1a1a;
+    border-radius: 10px;
+}
+
+.topResults h3 {
+    font-size: 1.5rem;
+    color: #85B8FF;
+}
+
+.bottomResults h3 {
+    font-size: 1rem;
+    color: #3a67a9;
+}
+
+.bottomResults {
+    display: flex;
+    align-content: center;
+    justify-content: space-evenly;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.returnIcons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.returnMobile {
+    display: flex;
+    gap: 8px;
+}
+
+.returnMobile:hover {
+    cursor: pointer;
+}
+
+@media (prefers-color-scheme: dark) {
+    .default {
+        color: #484848;
+    }
+
+    .correct {
+        color: white;
+    }
+
+    .cursor {
+        background-color: #85B8FF;
+    }
+}
