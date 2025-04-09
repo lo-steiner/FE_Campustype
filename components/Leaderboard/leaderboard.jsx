@@ -45,7 +45,7 @@ export default function Leaderboard() {
     }, []);
 
     return (
-        <>
+        <div className={styles.containerLeaderboard}>
             <div className={styles.filterContainer}>
                 <p className={`${styles.leaderboardFilter} ${selectedWords === null ? styles.activeFilter : ''} `}
                    onClick={() => handleLeaderboardChange(null)}>All time</p>
@@ -90,6 +90,6 @@ export default function Leaderboard() {
                     <p>Loading...</p>
                 )}
             </div>
-        </>
+        </div>
     );
 }

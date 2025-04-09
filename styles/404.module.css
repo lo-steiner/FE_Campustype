@@ -1,0 +1,86 @@
+.dark {
+    color: white;
+    background-color: black;
+}
+
+.scene {
+    padding: 2rem 1rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.actor {
+    font-size: 2.8rem;
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.actor:last-of-type {
+    margin-bottom: 2rem;
+}
+
+.actor__prefix {
+    margin-right: 0.6rem;
+}
+
+.actor__content {
+    flex-grow: 1;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    text-align: center;
+}
+
+.title {
+    color: #85B8FF;
+    font-size: 15rem;
+}
+
+.message {
+    color: white;
+    font-size: 1.4rem;
+}
+
+.errormessage {
+    color: #85B8FF;
+    font-size: 1rem;
+}
+
+.tips {
+    margin-top: 20px;
+    color: #85B8FF;
+    font-size: 1rem;
+}
+
+@keyframes blink {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.actor__content--typing::after {
+    content: '|';
+    animation: blink 500ms infinite;
+}
+
+.backgroundLetter {
+    position: absolute;
+    color: rgba(133, 184, 255, 0.5);
+    font-size: 2rem;
+    pointer-events: none;
+    animation: fadeOut 2s forwards;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
