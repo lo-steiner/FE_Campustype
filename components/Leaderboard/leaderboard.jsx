@@ -20,15 +20,6 @@ export default function Leaderboard() {
         return null;
     };
 
-    const getUsername = () => {
-        const storedData = localStorage.getItem(STORAGE_KEY);
-        if (storedData) {
-            const sessionData = JSON.parse(storedData);
-            return sessionData.username;
-        }
-        return null;
-    };
-
     useEffect(() => {
         const getUsers = async () => {
             try {

@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import styles from "./TypingTest.module.css";
 import WordsAPI from "../../lib/api/Words.js";
 import TypingResultAPI from "../../lib/api/TypingResult.js";
-import {useGlobalContext} from "../../store/index.js";
+import { useGlobalContext } from "../../store/index.js";
 
 let Words = null;
 
@@ -23,6 +23,7 @@ const TypingTest = ({ wordCount = 10 }) => {
         words: "",
         characters: "",
         sentence: "",
+        userInput: "",
         timestamp: ""
     });
     const [showResults, setShowResults] = useState(false);
@@ -31,10 +32,8 @@ const TypingTest = ({ wordCount = 10 }) => {
 
     const fetchWordsOnce = async () => {
         if (Words) return Words;
-
         try {
             const data = await WordsAPI.getWords();
-            //const data = await response.json();
             Words = data.map(entry => entry.word);
             return Words;
         } catch (error) {
@@ -45,15 +44,12 @@ const TypingTest = ({ wordCount = 10 }) => {
 
     const generateRandomLetters = async (wordCount) => {
         const words = await fetchWordsOnce();
-
         if (!words.length) return "";
-
         let result = "";
         for (let i = 0; i < wordCount; i++) {
             const randomIndex = Math.floor(Math.random() * words.length);
             result += words[randomIndex] + " ";
         }
-
         return result.trim();
     };
 
@@ -71,31 +67,25 @@ const TypingTest = ({ wordCount = 10 }) => {
 
     useEffect(() => {
         if (!isActive) return;
-
         const interval = setInterval(() => {
             setCount((prevCount) => prevCount + 0.1);
         }, 100);
-
         return () => clearInterval(interval);
     }, [isActive]);
 
     useEffect(() => {
         if (!textRef.current || !cursorRef.current || showResults) return;
-
         const spans = textRef.current.getElementsByTagName("span");
         const currentPos = userLetters.length;
-
         if (spans.length > 0) {
             const targetSpan = currentPos === 0 ? spans[0] : spans[Math.min(currentPos, spans.length - 1)];
             const rect = targetSpan.getBoundingClientRect();
             const containerRect = textRef.current.getBoundingClientRect();
-
             cursorRef.current.style.left = `${rect.left - containerRect.left}px`;
             cursorRef.current.style.top = `${rect.top - containerRect.top}px`;
             cursorRef.current.style.height = `${rect.height}px`;
         }
     }, [userLetters, displayLetters, showResults]);
-
 
     const resetTest = () => {
         setResults({
@@ -105,9 +95,10 @@ const TypingTest = ({ wordCount = 10 }) => {
             cpm: "",
             time: "",
             words: "",
-            characters: ""
+            characters: "",
+            sentence: "",
+            userInput: ""
         });
-
         generateRandomLetters(wordCount).then((result) => {
             setDisplayLetters(result);
             setUserLetters("");
@@ -146,10 +137,9 @@ const TypingTest = ({ wordCount = 10 }) => {
             words: wordCount,
             characters: (incorrect + correct),
             sentence: displayLetters,
+            userInput: userLetters,
             timestamp: Date.now()
         };
-
-        console.log("Calculated Results:", newResults);
 
         setResults(newResults);
         setShowResults(true);
@@ -187,9 +177,13 @@ const TypingTest = ({ wordCount = 10 }) => {
         }
     };
 
+    const handleReturn = () => {
+        setShowResults(false);
+        resetTest();
+    };
+
     useEffect(() => {
         document.addEventListener("keydown", handleKeyDown);
-
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
@@ -199,7 +193,7 @@ const TypingTest = ({ wordCount = 10 }) => {
         <div className={styles.container}>
             <div className={`${styles.viewContainer} ${showResults ? styles.showResults : styles.showTyping}`}>
                 <div className={styles.typingView}>
-                    <div className={styles.generatedText} ref={textRef}>
+                    <div className={styles.generatedText} ref={textRef} key={displayLetters}>
                         {displayLetters.split("").map((char, i) => {
                             let className = styles.default;
                             if (userLetters[i]) {
@@ -216,14 +210,47 @@ const TypingTest = ({ wordCount = 10 }) => {
                 </div>
                 <div className={styles.resultsView}>
                     <div className={styles.displayResult}>
-                        <p>Raw WPM: {results.raw}</p>
-                        <p>WPM: {results.wpm}</p>
-                        <p>CPM: {results.cpm}</p>
-                        <p>Accuracy: {results.accuracy}%</p>
-                        <p>Time: {results.time}</p>
-                        <p>Words: {results.words}</p>
-                        <p>Characters: {results.characters}</p>
-                        <p>Press Tab to try again</p>
+                        <div className={styles.topResults}>
+                            <div>
+                                <h3>WPM: {results.wpm}</h3>
+                                <h3>Acc: {results.accuracy}%</h3>
+                            </div>
+                            <div>
+                                <h2>
+                                    {results.sentence ? (
+                                        results.sentence.split("").map((char, i) => {
+                                            const userChar = results.userInput[i];
+                                            const isCorrect = userChar === char;
+                                            if (char === " " && userChar && !isCorrect) {
+                                                return (
+                                                    <span key={i} className={styles.wrongSpace}> _ </span>
+                                                );
+                                            }
+                                            return (
+                                                <span key={i} className={userChar ? (isCorrect ? styles.correct : styles.wrong) : styles.default}>
+                                                    {char}
+                                                </span>
+                                            );
+                                        })
+                                    ) : (
+                                        "No sentence available"
+                                    )}
+                                </h2>
+                            </div>
+                        </div>
+                        <div className={styles.bottomResults}>
+                            <h3>Raw: {results.raw}</h3>
+                            <h3>CPM: {results.cpm}</h3>
+                            <h3>Time: {results.time}</h3>
+                            <h3>Words: {results.words}</h3>
+                        </div>
+                        <div className={styles.returnIcons}>
+                            <p>Press Tab to try again</p>
+                            <div className={styles.returnMobile} onClick={handleReturn}>
+                                <p>Return</p>
+                                <i className="material-icons">subdirectory_arrow_left</i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
