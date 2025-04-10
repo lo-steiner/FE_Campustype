@@ -73,7 +73,6 @@ export default function Leaderboard() {
                                 year: "numeric",
                             });
 
-
                             return (
                                 <li
                                     key={user.id}
