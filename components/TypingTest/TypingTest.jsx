@@ -6,10 +6,13 @@ import { useGlobalContext } from "../../store/index.js";
 
 let Words = null;
 
-const TypingTest = ({ wordCount = 10 }) => {
+const TypingTest = () => {
     const stopTimer = () => setIsActive(false);
     const startTimer = () => setIsActive(true);
+
     const { session, login, logout } = useGlobalContext();
+
+    const [wordCount, setWordCount] = useState(10);
     const [wrongChars, setWrongChars] = useState([]);
     const [displayLetters, setDisplayLetters] = useState("");
     const [userLetters, setUserLetters] = useState("");
@@ -117,7 +120,7 @@ const TypingTest = ({ wordCount = 10 }) => {
         stopTimer();
         let correct = 0;
         let incorrect = 0;
-        const wrongPositions = [];  // Track wrong characters with positions
+        const wrongPositions = [];
 
         displayLetters.split("").forEach((char, i) => {
             if (userLetters[i] === char) {
@@ -156,9 +159,9 @@ const TypingTest = ({ wordCount = 10 }) => {
         setShowResults(true);
 
         if (session) {
-            TypingResultAPI.saveResult(newResults, session.accessToken)
-                .then(response => console.log("API Response:", response))
-                .catch(error => console.error("API Error:", error));
+            if (acc > 70) {
+                const response = TypingResultAPI.saveResult(newResults, session.accessToken)
+            }
         }
     };
 
@@ -193,6 +196,13 @@ const TypingTest = ({ wordCount = 10 }) => {
         resetTest();
     };
 
+    const handleWordAmount = (e) => {
+        e.preventDefault();
+        setWordCount(e.target.textContent);
+        setShowResults(false);
+        resetTest();
+    };
+
     useEffect(() => {
         document.addEventListener("keydown", handleKeyDown);
         return () => {
@@ -202,8 +212,15 @@ const TypingTest = ({ wordCount = 10 }) => {
 
     return (
         <div className={styles.container}>
-            <div>
-
+            <div className={`${showResults ? styles.showResults : styles.showTyping} ${styles.settingsContainer} `}>
+                <div className={styles.settingsIcons}>
+                    <p>Words: </p>
+                    <p className={styles.settingsClickable} onClick={handleWordAmount}>10</p>
+                    <p className={styles.settingsClickable} onClick={handleWordAmount}>15</p>
+                    <p className={styles.settingsClickable} onClick={handleWordAmount}>20</p>
+                    <p>|</p>
+                    <p className={styles.settingsClickable} onClick={handleReturn}>Clear</p>
+                </div>
             </div>
             <div className={`${styles.viewContainer} ${showResults ? styles.showResults : styles.showTyping}`}>
                 <div className={styles.typingView}>

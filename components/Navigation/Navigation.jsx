@@ -16,8 +16,10 @@ const Navigation = () => {
 
     const handleLogout = () => {
         logout();
-        toast.success("Logout successful!", { transition: Bounce });
-    };
+        toast.success("Logout successfull!", { transition: Bounce });
+        setIsOpen(false);
+    }
+
 
     useEffect(() => {
         try {
@@ -54,7 +56,8 @@ const Navigation = () => {
                     <li><Link href="/aboutus">About Us</Link></li>
                 </ul>
             </div>
-            <NavigationMobile isOpen={isOpen}/>
+            <NavigationMobile isOpen={isOpen} setIsOpen={setIsOpen}
+            />
         </nav>
     );
 };

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import RunDetails from '../../components/RunDetails/runDetails';
+import TypingResult from "../../lib/api/TypingResult.js";
+import TypingResultAPI from "../../lib/api/TypingResult.js";
 
 export default function RunDetailsPage() {
     const router = useRouter();
@@ -14,7 +16,7 @@ export default function RunDetailsPage() {
 
         const fetchPost = async () => {
             try {
-                const response = await fetch(`http://ndeszynskio:8080/api/run/${id}`);
+                const response = await TypingResultAPI.getRun(id);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }

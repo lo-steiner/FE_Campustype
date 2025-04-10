@@ -10,6 +10,27 @@
     width: 100%;
 }
 
+.settingsContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.settingsIcons {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 10px;
+    flex-wrap: wrap;
+    background-color: #383838;
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+
+.settingsClickable:hover{
+    cursor: pointer;
+    color: #85B8FF;
+}
+
 .typingView,
 .resultsView {
     position: absolute;
@@ -17,6 +38,16 @@
     left: 0;
     width: 100%;
     transition: all 0.5s ease;
+}
+
+.settingsContainer {
+    transition: all 0.5s ease;
+    opacity: 1;
+    transform: translateX(0);
+}
+.showResults.settingsContainer {
+    opacity: 0;
+    transform: translateX(-100%);
 }
 
 .typingView {
@@ -27,6 +58,7 @@
 .resultsView {
     opacity: 0;
     transform: translateX(100%);
+    overflow: hidden;
 }
 
 .showResults .typingView {
@@ -76,11 +108,11 @@
 }
 
 .default {
-    color: #85B8FF;
+    color: #383838;
 }
 
 .correct {
-    color: #000000;
+    color: #ffffff;
 }
 
 .cursorActive {
@@ -95,7 +127,7 @@
     position: absolute;
     min-width: 2px;
     width: 2px;
-    background-color: #000000;
+    background-color: #85B8FF;
     transition: left 0.1s ease-out;
 }
 
@@ -158,16 +190,53 @@
     flex-wrap: wrap;
 }
 
-@media (prefers-color-scheme: dark) {
-    .default {
-        color: #484848;
+@media (prefers-color-scheme: light) {
+    .cursor {
+        background-color: #85B8FF;
     }
 
-    .correct {
+    .settingsIcons {
+        color: white;
+        background-color: #85B8FF;
+    }
+    .infoContainer {
+        color: #85B8FF;
+    }
+
+    .topResults {
+        color: white;
+        background-color: #85B8FF;
+    }
+
+    .topResults h3 {
+        font-size: 1.5rem;
         color: white;
     }
 
-    .cursor {
-        background-color: #85B8FF;
+    .bottomResults h3 {
+        font-size: 1rem;
+        color: #85B8FF;
+    }
+
+    .topResults .correct {
+        color: white;
+    }
+
+    .correct {
+        color: black;
+    }
+
+    .default {
+        color: #85B8FF;
+    }
+
+    .settingsClickable{
+        transition: 0.5s ease-out;
+    }
+
+    .settingsClickable:hover{
+        cursor: pointer;
+        color: #000000;
+        transition: 0.5s ease-out;
     }
 }
