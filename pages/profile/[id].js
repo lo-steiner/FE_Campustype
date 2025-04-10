@@ -5,6 +5,8 @@ import UsersAPI from '../../lib/api/Users';
 import styles from './profile.module.css';
 import Link from 'next/Link';
 
+
+
 function calculateAverage(array, field) {
     if (!array || array.length === 0) return 0;
     const sum = array.reduce((acc, item) => acc + (item[field] || 0), 0);
