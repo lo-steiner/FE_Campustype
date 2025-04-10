@@ -84,3 +84,10 @@
         opacity: 0;
     }
 }
+
+@media (prefers-color-scheme: light) {
+    .message {
+        color: #000000;
+        font-size: 1.4rem;
+    }
+}

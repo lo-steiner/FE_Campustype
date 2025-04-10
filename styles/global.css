@@ -27,7 +27,6 @@ body {
     background: linear-gradient(-45deg, #b4d4fd, #ffffff, #b4d4fd);
     background-size: 400% 400%;
     animation: gradient 20s ease infinite;
-    height: 100vh;
 }
 
 @keyframes gradient {
@@ -66,9 +65,8 @@ a {
         color-scheme: dark;
     }
     body {
-        background: linear-gradient(-45deg, #000000, #1E1E1E, #1E1E1E, #000000);
+        background: linear-gradient(-45deg, #000000, #1E1E1E, #232323, #000000);
         background-size: 400% 400%;
         animation: gradient 20s ease infinite;
-        height: 100vh;
     }
 }
