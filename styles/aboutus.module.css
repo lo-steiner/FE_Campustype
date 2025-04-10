@@ -14,12 +14,13 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 #oli {
-    width: 400px;
+    width: 100%;
 }
 
 #levy {
-    width: 350px;
+    width: 100%;
 }

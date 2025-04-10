@@ -12,6 +12,7 @@
     position: relative;
     cursor: pointer;
     display: none;
+    margin-right: 20px;
 }
 
 .navIcon span {
@@ -94,12 +95,12 @@
     }
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 830px) {
     .links a {
         display: none;
     }
     .navIcon {
-        display: block;
+        display: flex;
     }
     .nav {
         padding: 0;

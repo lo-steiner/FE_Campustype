@@ -14,7 +14,7 @@ export default function AboutUs() {
             <div className={styles.images}>
                 <Link href="/profile/132"><img id={styles.oli} src="/Oli.png" alt="Bildbeschreibung"/></Link>
                 <h1>Oli</h1>
-                <h3>Designer</h3>
+                <h3>K*rwa Bober</h3>
             </div>
         </div>
     </div>

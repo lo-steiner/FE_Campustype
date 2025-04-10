@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import LeaderboardAPI from "../../lib/api/Leaderboard.js";
-import styles from './styles.module.css'
+import styles from './Leaderboard.module.css';
 import { hydrateRoot } from "react-dom/client";
 import Link from "next/Link.js";
-
 
 const STORAGE_KEY = 'session';
 
@@ -11,7 +10,7 @@ export default function Leaderboard() {
     const [users, setUsers] = useState([]);
     const [width, setWidth] = useState(0);
     const [selectedWords, setSelectedWords] = useState(10);
-    
+
     const getUsername = () => {
         if (typeof window !== 'undefined') {
             const storedData = localStorage.getItem(STORAGE_KEY);
@@ -29,7 +28,7 @@ export default function Leaderboard() {
             setUsers(response);
             setSelectedWords(words);
         } catch (error) {
-            console.error("Failed to load leaderboard: ", error);
+            console.error("Failed to load leaderboard");
         }
     };
 
@@ -50,14 +49,18 @@ export default function Leaderboard() {
     return (
         <div className={styles.containerLeaderboard}>
             <div className={styles.filterContainer}>
-                <p className={`${styles.leaderboardFilter} ${selectedWords === null ? styles.activeFilter : ''} `}
-                   onClick={() => handleLeaderboardChange(null)}>All time</p>
-                <p className={`${styles.leaderboardFilter} ${selectedWords === 10 ? styles.activeFilter : ''} `}
-                   onClick={() => handleLeaderboardChange(10)}>Words 10</p>
-                <p className={`${styles.leaderboardFilter} ${selectedWords === 15 ? styles.activeFilter : ''} `}
-                   onClick={() => handleLeaderboardChange(15)}>Words 15</p>
-                <p className={`${styles.leaderboardFilter} ${selectedWords === 20 ? styles.activeFilter : ''} `}
-                   onClick={() => handleLeaderboardChange(20)}>Words 20</p>
+                <div className={styles.mainFilter}>
+                    <p className={`${styles.leaderboardFilter} ${selectedWords === null ? styles.activeFilter : ''}`}
+                       onClick={() => handleLeaderboardChange(null)}>All time</p>
+                </div>
+                <div className={styles.subFilter}>
+                    <p className={`${styles.leaderboardFilter} ${selectedWords === 10 ? styles.activeFilter : ''}`}
+                        onClick={() => handleLeaderboardChange(10)}>Words 10</p>
+                    <p className={`${styles.leaderboardFilter} ${selectedWords === 15 ? styles.activeFilter : ''}`}
+                        onClick={() => handleLeaderboardChange(15)}>Words 15</p>
+                    <p className={`${styles.leaderboardFilter} ${selectedWords === 20 ? styles.activeFilter : ''}`}
+                        onClick={() => handleLeaderboardChange(20)}>Words 20</p>
+                </div>
             </div>
             <div className={styles.leaderboardContainer}>
                 <h1 className={styles.leaderboardTitle}>LEADERBOARD</h1>
@@ -74,10 +77,7 @@ export default function Leaderboard() {
                             });
 
                             return (
-                                <li
-                                  key={user.id}
-                                  className={username === user.user.username ? styles.currentUser : styles.rangElement}
-                                >
+                                <li key={user.id} className={username === user.user.username ? styles.currentUser : styles.rangElement}>
                                     <Link href={`/profile/${user.user.id}`}>
                                         <h2 className={styles.rangTitle}>
                                             {i + 1} {user.user.username}
@@ -101,7 +101,9 @@ export default function Leaderboard() {
                         })}
                     </ul>
                 ) : (
-                    <p>Loading...</p>
+                    <ul className={styles.leaderboardList}>
+
+                    </ul>
                 )}
             </div>
         </div>

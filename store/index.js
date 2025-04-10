@@ -43,7 +43,6 @@ const useSession = () => {
             const expiryDate = new Date(0); // Create date from epoch
             expiryDate.setUTCSeconds(exp); // Set expiration time
             if (new Date() >= expiryDate) { // Check if expired
-                console.log("jwt expired");
                 logout();
                 return;
             }

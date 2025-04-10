@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import LeaderboardAPI from "../../lib/api/Leaderboard.js";
-import styles from './styles.module.css'
+import styles from './RunDetails.module.css'
 import Link from 'next/Link'
 
 
 
 export default function Leaderboard({props}) {
     const results = props;
-
 
     return (
         <div className={styles.container}>
@@ -21,8 +20,7 @@ export default function Leaderboard({props}) {
                             </div>
                             <div>
                                 <h2>
-                                    {results.sentence ? (
-                                        results.sentence.split("").map((char, i) => {
+                                    {results.sentence ? (results.sentence.split("").map((char, i) => {
                                             const userChar = results.userInput[i];
                                             const isCorrect = userChar === char;
                                             if (char === " " && userChar && !isCorrect) {
@@ -37,7 +35,7 @@ export default function Leaderboard({props}) {
                                             );
                                         })
                                     ) : (
-                                        "No sentence available"
+                                        <p>No sentence available</p>
                                     )}
                                 </h2>
                             </div>

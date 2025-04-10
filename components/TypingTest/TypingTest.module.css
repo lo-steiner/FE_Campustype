@@ -33,7 +33,7 @@
 
 .typingView,
 .resultsView {
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     width: 100%;
@@ -58,7 +58,6 @@
 .resultsView {
     opacity: 0;
     transform: translateX(100%);
-    overflow: hidden;
 }
 
 .showResults .typingView {
@@ -132,6 +131,7 @@
 }
 
 .displayResult {
+    margin-top: -20%;
     display: grid;
     grid-template-columns: repeat(1, 1fr);
     gap: 30px

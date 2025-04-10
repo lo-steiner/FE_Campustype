@@ -1,21 +1,17 @@
 import { useEffect, useState, useRef } from "react";
-import styles from "./TypingTest.module.css";
+import styles from "../TypingTest/TypingTest.module.css";
 import TypingResultAPI from "../../lib/api/TypingResult.js";
 import { useGlobalContext } from "../../store/index.js";
 
 const TypingTest = () => {
-    const stopTimer = () => setIsActive(false);
-    const startTimer = () => setIsActive(true);
-
     const { session } = useGlobalContext();
 
     const [wordCount, setWordCount] = useState(10);
     const [wrongChars, setWrongChars] = useState([]);
     const [displayLetters, setDisplayLetters] = useState("");
     const [userLetters, setUserLetters] = useState("");
-    const [count, setCount] = useState(0);
-    const [isActive, setIsActive] = useState(false);
     const [testToken, setTestToken] = useState(null);
+    const [startTime, setStartTime] = useState(null);
     const [results, setResults] = useState({
         accuracy: "",
         raw: "",
@@ -31,6 +27,7 @@ const TypingTest = () => {
     const [showResults, setShowResults] = useState(false);
     const textRef = useRef(null);
     const cursorRef = useRef(null);
+    const inputRef = useRef(null);
 
     const startTest = async (wordCount) => {
         try {
@@ -38,42 +35,27 @@ const TypingTest = () => {
             setTestToken(response.token);
             setDisplayLetters(response.sentence);
         } catch (error) {
-            console.error("Error starting test:", error);
             setDisplayLetters("Error loading test");
         }
     };
 
-    useEffect(() => {
-        startTest(wordCount);
-    }, [wordCount]);
+    const handleReturn = () => {
+        setShowResults(false);
+        resetTest();
+    };
 
-    useEffect(() => {
-        if (userLetters.length === displayLetters.length && userLetters.length > 0) {
-            handleFinish();
+    const handleWordAmount = (e) => {
+        e.preventDefault();
+        setWordCount(Number(e.target.textContent));
+        setShowResults(false);
+        resetTest();
+    };
+
+    const handleTap = () => {
+        if (inputRef.current && !showResults) {
+            inputRef.current.focus();
         }
-    }, [userLetters, displayLetters]);
-
-    useEffect(() => {
-        if (!isActive) return;
-        const interval = setInterval(() => {
-            setCount((prevCount) => prevCount + 0.1);
-        }, 100);
-        return () => clearInterval(interval);
-    }, [isActive]);
-
-    useEffect(() => {
-        if (!textRef.current || !cursorRef.current || showResults) return;
-        const spans = textRef.current.getElementsByTagName("span");
-        const currentPos = userLetters.length;
-        if (spans.length > 0) {
-            const targetSpan = currentPos === 0 ? spans[0] : spans[Math.min(currentPos, spans.length - 1)];
-            const rect = targetSpan.getBoundingClientRect();
-            const containerRect = textRef.current.getBoundingClientRect();
-            cursorRef.current.style.left = `${rect.left - containerRect.left}px`;
-            cursorRef.current.style.top = `${rect.top - containerRect.top}px`;
-            cursorRef.current.style.height = `${rect.height}px`;
-        }
-    }, [userLetters, displayLetters, showResults]);
+    };
 
     const resetTest = () => {
         setResults({
@@ -88,19 +70,28 @@ const TypingTest = () => {
             userInput: ""
         });
         setUserLetters("");
-        setCount(0);
         setTestToken(null);
-        stopTimer();
+        setStartTime(null);
         startTest(wordCount);
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
     };
 
     const addLetter = (letter) => {
+        if (userLetters.length === 0 && !startTime) {
+            setStartTime(Date.now());
+        }
         const updated = userLetters + letter;
         setUserLetters(updated);
     };
 
     const handleFinish = async () => {
-        stopTimer();
+        if (!startTime) {
+            console.error("Test finished without starting timer");
+            return;
+        }
+
         let correct = 0;
         let incorrect = 0;
         const wrongPositions = [];
@@ -118,7 +109,8 @@ const TypingTest = () => {
             }
         });
 
-        const timeInMinutes = count / 60;
+        const elapsedTime = (Date.now() - startTime) / 1000;
+        const timeInMinutes = elapsedTime / 60;
         const cpm = Math.round(correct / timeInMinutes) || 0;
         const accInDec = correct / (incorrect + correct) || 0;
         const acc = Math.round(accInDec * 100);
@@ -129,7 +121,7 @@ const TypingTest = () => {
             raw: Math.round(wordCount / timeInMinutes),
             wpm: wpm,
             cpm: cpm,
-            time: Math.round(count * 100) / 100,
+            time: Math.round(elapsedTime * 100) / 100,
             words: wordCount,
             characters: (incorrect + correct),
             sentence: displayLetters,
@@ -142,11 +134,15 @@ const TypingTest = () => {
         setShowResults(true);
 
         if (session?.accessToken && acc > 70) {
+            if (!testToken) {
+                return;
+            }
             try {
                 await TypingResultAPI.saveResult(newResults, session.accessToken, testToken);
-                console.log("Result saved successfully");
             } catch (error) {
-                console.error("Error saving result:", error);
+                if (error.response) {
+                    error.response.text().then(text => console.error("Backend error message:", text));
+                }
             }
         } else if (!session?.accessToken) {
             console.log("User not logged in, results not saved");
@@ -167,29 +163,39 @@ const TypingTest = () => {
 
         if (!showResults) {
             if ((e.key.length === 1 && /^[a-zA-Z]$/.test(e.key)) || e.key === " ") {
-                if (userLetters.length === 0) startTimer();
                 addLetter(e.key);
                 e.preventDefault();
             }
             if (e.key === "Backspace") {
                 setUserLetters(userLetters.slice(0, -1));
-                if (userLetters.length === 1) stopTimer();
                 e.preventDefault();
             }
         }
     };
 
-    const handleReturn = () => {
-        setShowResults(false);
-        resetTest();
-    };
+    useEffect(() => {
+        startTest(wordCount);
+    }, [wordCount]);
 
-    const handleWordAmount = (e) => {
-        e.preventDefault();
-        setWordCount(Number(e.target.textContent));
-        setShowResults(false);
-        resetTest();
-    };
+    useEffect(() => {
+        if (userLetters.length === displayLetters.length && userLetters.length > 0) {
+            handleFinish();
+        }
+    }, [userLetters, displayLetters]);
+
+    useEffect(() => {
+        if (!textRef.current || !cursorRef.current || showResults) return;
+        const spans = textRef.current.getElementsByTagName("span");
+        const currentPos = userLetters.length;
+        if (spans.length > 0) {
+            const targetSpan = currentPos === 0 ? spans[0] : spans[Math.min(currentPos, spans.length - 1)];
+            const rect = targetSpan.getBoundingClientRect();
+            const containerRect = textRef.current.getBoundingClientRect();
+            cursorRef.current.style.left = `${rect.left - containerRect.left}px`;
+            cursorRef.current.style.top = `${rect.top - containerRect.top}px`;
+            cursorRef.current.style.height = `${rect.height}px`;
+        }
+    }, [userLetters, displayLetters, showResults]);
 
     useEffect(() => {
         document.addEventListener("keydown", handleKeyDown);
@@ -211,7 +217,7 @@ const TypingTest = () => {
                 </div>
             </div>
             <div className={`${styles.viewContainer} ${showResults ? styles.showResults : styles.showTyping}`}>
-                <div className={styles.typingView}>
+                <div className={styles.typingView} onClick={handleTap}>
                     <div className={styles.generatedText} ref={textRef} key={displayLetters}>
                         {displayLetters.split("").map((char, i) => {
                             let className = styles.default;
@@ -226,6 +232,11 @@ const TypingTest = () => {
                         })}
                         {!showResults && <div ref={cursorRef} className={styles.cursor}></div>}
                     </div>
+                    <input
+                        ref={inputRef}
+                        type="text"
+                        style={{ opacity: 0, position: "absolute", width: 0, height: 0 }}
+                    />
                     {!session?.accessToken && (
                         <div className={styles.infoContainer}>
                             <i className="material-icons">info_outline</i>

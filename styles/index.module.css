@@ -2,3 +2,18 @@
     width: 100%;
     max-width: 1200px;
 }
+
+.indexWrapper {
+    margin-top: 120px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+
+    scrollbar-width: none;     /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.indexWrapper::-webkit-scrollbar {
+    display: none;            /* Chrome, Safari, Edge */
+}

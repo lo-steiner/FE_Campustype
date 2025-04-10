@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import RunDetails from '../../components/RunDetails/runDetails';
+import RunDetails from '../../components/RunDetails/RunDetails.jsx';
 import TypingResult from "../../lib/api/TypingResult.js";
 import TypingResultAPI from "../../lib/api/TypingResult.js";
 

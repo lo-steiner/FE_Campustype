@@ -88,7 +88,6 @@ const LoginForm = ({ post }) => {
             toast.success("Register successful!", { transition: Bounce });
             router.push("/");
         } catch (err) {
-            console.error("Error during registration/login:", err.message, err.response?.status);
             let errorMessage = "An error occurred";
             if (err.response) {
                 const status = err.response.status;
