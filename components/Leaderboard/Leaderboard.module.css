@@ -112,6 +112,13 @@
     gap: 50px;
 }
 
+.loadingPlaceholderText {
+    background-color: #666666;
+    height: 10px;
+    width: 100%;
+    margin: 10px;
+}
+
 @media (prefers-color-scheme: light) {
     .leaderboardContainer {
         background-color: #ffffff;
@@ -223,18 +230,28 @@
         display: block;
     }
     .filterContainer {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(2, 1fr);
-        gap: 10px;
         padding: 10px;
         border-radius: 20px;
         max-height: 210px;
         margin-bottom: 30px;
     }
 
+    .mainFilter {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        margin: 10px;
+    }
+
+    .subFilter {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        margin: 10px;
+        gap: 10px;
+        padding: 0;
+    }
+
     .leaderboardFilter {
-        padding: 10px 20px;
+        padding: 10px;
         border-radius: 10px;
         margin: 0;
     }
@@ -259,7 +276,7 @@
     }
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 750px) {
     .rangElement {
         grid-template-columns: repeat(2, 1fr);
     }

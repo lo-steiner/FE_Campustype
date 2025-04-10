@@ -18,22 +18,18 @@ export default function ProfilePage() {
         if (!id) return;
 
         const fetchResults = async () => {
-            try {
-                const data = await UsersAPI.getUser(id);
-                const session = JSON.parse(localStorage.getItem('session'))
-                if (session) {
-                    if (parseInt(id) !== session.userId) {
-                        router.push(`/profile/${id}`)
-                        toast.error("You cant edit other profiles!", { transition: Bounce });
-                    }
-                } else {
+            const data = await UsersAPI.getUser(id);
+            const session = JSON.parse(localStorage.getItem('session'))
+            if (session) {
+                if (parseInt(id) !== session.userId) {
                     router.push(`/profile/${id}`)
-                    toast.error("You must be logged in!", { transition: Bounce });
+                    toast.error("You cant edit other profiles!", { transition: Bounce });
                 }
-                setUser(data);
-            } catch (error) {
-                console.error('Fehler beim Abrufen der Ergebnisse:', error);
+            } else {
+                router.push(`/profile/${id}`)
+                toast.error("You must be logged in!", { transition: Bounce });
             }
+            setUser(data);
         };
 
         fetchResults();
@@ -131,7 +127,6 @@ export default function ProfilePage() {
             toast.success("Profile updated successfully!", { transition: Bounce });
             router.push(`/profile/${id}`)
         } catch (error) {
-            console.error("Error updating profile:", error);
             toast.error("Failed to update profile.", { transition: Bounce });
         }
     };

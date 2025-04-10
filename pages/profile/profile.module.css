@@ -8,7 +8,6 @@
 
 .topContainer {
     display: flex;
-    height: 300px;
     width: 100%;
     padding: 20px;
     border-radius: 12px;
@@ -16,10 +15,6 @@
     justify-content: space-between;
 }
 
-.topContainer div {
-    max-width: 50%;
-    min-width: 50%;
-}
 
 #seperator {
     padding: 0;
@@ -38,8 +33,9 @@
     padding-top: 20px;
 }
 
-.rightContainer i {
-    
+.topContainer img {
+    width: 200px;
+    height: 200px;
 }
 
 .rightContainer p {
@@ -56,6 +52,7 @@
 .profileContainer {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 .profileContainer img {
@@ -110,15 +107,76 @@
 }
 
 .runsDisplay {
+    font-weight: 100;
+    font-size: 0.89rem;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     width: 100%;
-    margin: 10px;
+    margin: 10px 10px 10px 0;
     padding: 10px;
     background-color: #2c2c2c;
     border-radius: 10px;
 }
 
-.runsList {
-
+.runsDisplay:hover {
+    cursor: pointer;
+    background-color: #3a3a3a;
 }
+
+.loadingPlaceholderText {
+    background-color: #666666;
+    height: 10px;
+    width: 100%;
+    margin: 10px;
+}
+
+@media (prefers-color-scheme: light) {
+    .topContainer {
+        background-color: #ffffff;
+    }
+    .bottomContainer {
+        background-color: #ffffff;
+    }
+    #seperator {
+        background-color: #dbdbdb;
+    }
+    .runsDisplay {
+        background-color: #ffffff;
+    }
+    .runsDisplay:hover {
+        cursor: pointer;
+        background-color: #85B8FF;
+    }
+}
+
+@media only screen and (max-width: 980px) {
+    .topContainer {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .mobileContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+    }
+}
+
+@media only screen and (max-width: 950px) {
+    .runsDisplay {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .runsDisplay h3{
+        font-size: 0.9rem;
+    }
+}
+
+@media only screen and (max-width: 750px) {
+    .runsDisplay {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .runsDisplay h3{
+        font-size: 0.8rem;
+    }
+}
+

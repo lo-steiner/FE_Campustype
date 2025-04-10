@@ -6,3 +6,14 @@
     justify-content: space-evenly;
     flex-wrap: wrap;
 }
+
+@media only screen and (max-width: 600px) {
+    .footerContainer {
+        margin-top: 30px;
+        background-color: #1a1a1a;
+        padding: 30px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        text-align: center;
+    }
+}

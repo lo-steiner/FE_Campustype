@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import styles from './NavigationMobile.module.css';
 import { useGlobalContext } from "../../store/index.js";
+import {Bounce, toast} from "react-toastify";
 
 const NavigationMobile = ({ isOpen, setIsOpen }) => {
     const { session, login, logout } = useGlobalContext();
     const [isClient, setIsClient] = useState(false);
-
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
+    const [userId, setUserId] = useState(null);
 
     const handleNavPress = () => {
         setIsOpen(false);
@@ -17,8 +15,26 @@ const NavigationMobile = ({ isOpen, setIsOpen }) => {
 
     const handleLogOut = () => {
         setIsOpen(false);
+        toast.success("Logout successfull!", { transition: Bounce });
         logout();
     };
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
+    useEffect(() => {
+        try {
+            const storedSession = localStorage.getItem('session');
+            if (storedSession) {
+                const session = JSON.parse(storedSession);
+                setUserId(session.userId);
+            }
+        } catch (error) {
+            localStorage.clear();
+        }
+    }, [session]);
+
 
     return (
         <div className={`${styles.navTab} ${isOpen ? styles.open : ''}`}>
@@ -33,7 +49,7 @@ const NavigationMobile = ({ isOpen, setIsOpen }) => {
                 </div>
             </Link>
             {session ? (
-                <Link href="/#" title="Profile">
+                <Link href={`/profile/${userId}`} title="Profile">
                     <div className={styles.navTabLinks} onClick={handleNavPress}>
                         <p>Profile</p>
                     </div>
@@ -52,7 +68,7 @@ const NavigationMobile = ({ isOpen, setIsOpen }) => {
                     </div>
                 </Link>
             )}
-            <Link href="/#" title="About Us">
+            <Link href="/aboutus" title="About Us">
                 <div className={styles.navTabLinks} onClick={handleNavPress}>
                     <p>About Us</p>
                 </div>
