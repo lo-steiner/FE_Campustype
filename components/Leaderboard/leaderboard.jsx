@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import LeaderboardAPI from "../../lib/api/Leaderboard.js";
 import styles from './styles.module.css'
 import { hydrateRoot } from "react-dom/client";
+import Link from "next/Link.js";
 
 const STORAGE_KEY = 'session'
 
@@ -58,14 +59,15 @@ export default function Leaderboard() {
                         ? styles.currentUser
                         : styles.rangElement
                     }
-                    onClick={() => window.location.href = `/run/${user.id}`}
                   >
-                    <h2 className={styles.rangTitle}>
-                      {i + 1} {user.user.username}
-                    </h2>
-                    <h3 className={styles.rangStat}>WPM: {user.wpm}</h3>
-                    <h3 className={styles.rangStat}>Accuracy: {user.accuracy}%</h3>
-                    <h3 className={styles.rangStat} id={styles.rangStat}>{formattedDate}</h3>
+                    <Link href={`/profile/${user.user.id}`}>
+                      <h2 className={styles.rangTitle}>
+                        {i + 1} {user.user.username}
+                      </h2>
+                    </Link>
+                    <Link href={`/run/${user.id}`}><h3 className={styles.rangStat}>WPM: {user.wpm}</h3></Link>
+                    <Link href={`/run/${user.id}`}><h3 className={styles.rangStat}>Accuracy: {user.accuracy}%</h3></Link>
+                    <Link href={`/run/${user.id}`}><h3 className={styles.rangStat}  id={styles.rangStat}>{formattedDate}</h3></Link>
                   </li>
                 );
               })}

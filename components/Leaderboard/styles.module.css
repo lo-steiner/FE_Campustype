@@ -64,6 +64,7 @@
 }
 
 .rangStat {
+    cursor: pointer;
     padding: 0 20px;
     font-size: 1rem;
     color: #e0e0e0;
