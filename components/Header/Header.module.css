@@ -27,7 +27,7 @@
 
 @media (prefers-color-scheme: dark) {
     .header {
-        background-color: #1d1e20;
+        background-color: #1a1a1a;
         box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     }
 }
