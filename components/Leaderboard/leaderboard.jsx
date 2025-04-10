@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import LeaderboardAPI from "../../lib/api/Leaderboard.js";
-import styles from './styles.module.css';
+import styles from './styles.module.css'
+import { hydrateRoot } from "react-dom/client";
+import Link from "next/Link.js";
+
 
 const STORAGE_KEY = 'session';
 
 export default function Leaderboard() {
     const [users, setUsers] = useState([]);
     const [width, setWidth] = useState(0);
-    const [selectedWords, setSelectedWords] = useState(10); // Added to track current word count
+    const [selectedWords, setSelectedWords] = useState(10);
 
     const getUsername = () => {
         if (typeof window !== 'undefined') {
@@ -69,6 +72,7 @@ export default function Leaderboard() {
                                 month: "short",
                                 year: "numeric",
                             });
+
 
                             return (
                                 <li

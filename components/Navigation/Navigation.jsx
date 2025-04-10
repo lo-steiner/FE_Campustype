@@ -3,12 +3,12 @@ import Link from 'next/link';
 import styles from './Navigation.module.css';
 import { useGlobalContext } from "../../store/index.js";
 import NavigationMobile from "../Navigation/NavigationMobile";
-import {Bounce, toast} from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 
 const Navigation = () => {
-    const { session, login, logout } = useGlobalContext();
+    const { session, logout } = useGlobalContext();
     const [isOpen, setIsOpen] = useState(false);
-    const [isClient, setIsClient] = useState(false);
+    const [userId, setUserId] = useState(null);
 
     const handleClick = () => {
         setIsOpen(!isOpen);
@@ -20,9 +20,19 @@ const Navigation = () => {
         setIsOpen(false);
     }
 
+
     useEffect(() => {
-        setIsClient(true);
-    }, []);
+        try {
+            const storedSession = localStorage.getItem('session');
+            if (storedSession) {
+                const session = JSON.parse(storedSession);
+                setUserId(session.userId);
+            }
+        } catch (error) {
+            console.error('LocalStorage error:', error);
+            localStorage.clear();
+        }
+    }, [session]);
 
     return (
         <nav className={styles.nav}>
@@ -36,12 +46,12 @@ const Navigation = () => {
                 <ul>
                     <li><Link href="/leaderboard">Leaderboard</Link></li>
                     {session ? (
-                        <li><Link href="/profile">Profile</Link></li>
+                        userId && <li><Link href={`/profile/${userId}`}>Profile</Link></li>
                     ) : (
                         <li><Link href="/login">Login</Link></li>
                     )}
                     {session && (
-                        <li><Link href="/" onClick={() => handleLogout()}>Logout</Link></li>
+                        <li><Link href="/" onClick={handleLogout}>Logout</Link></li>
                     )}
                     <li><Link href="/aboutus">About Us</Link></li>
                 </ul>
