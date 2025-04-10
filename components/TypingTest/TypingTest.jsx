@@ -44,7 +44,7 @@ const TypingTest = () => {
     };
 
     useEffect(() => {
-        startTest(wordCount); // Run regardless of login state
+        startTest(wordCount);
     }, [wordCount]);
 
     useEffect(() => {

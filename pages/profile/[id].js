@@ -25,6 +25,17 @@ export default function ProfilePage() {
     const [results, setResults] = useState([]);
     const [user, setUser] = useState(null);
     const [ownProfile, setOwnProfile] = useState()
+    const [width, setWidth] = useState(0);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setWidth(window.innerWidth);
+        }
+
+        const handleResize = () => setWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         if (!id) return;
@@ -117,8 +128,12 @@ export default function ProfilePage() {
                                 <h3>WPM: {result.wpm}</h3>
                                 <h3>Acc: {result.accuracy}%</h3>
                                 <h3>Time: {result.time} s</h3>
-                                <h3>Words: {result.words} s</h3>
-                                <h3>{formattedDate}</h3>
+                                {width > 700 && (
+                                    <h3>{formattedDate}</h3>
+                                )}
+                                {width > 950 && (
+                                    <h3>Words: {result.words}</h3>
+                                )}
                             </li>
                         );
                     })}
