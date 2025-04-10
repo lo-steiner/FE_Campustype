@@ -29,7 +29,9 @@ export default function ProfilePage() {
         const fetchResults = async () => {
             try {
                 const data = await UsersAPI.getUser(id);
+                const results = await TypingResultAPI.getResults(id);
                 console.log(data);
+                setResults(results);
                 setUser(data);
             } catch (error) {
                 console.error('Error fetching results:', error);
