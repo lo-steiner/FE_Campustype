@@ -17,11 +17,7 @@ export default function RunDetailsPage() {
         const fetchPost = async () => {
             try {
                 const response = await TypingResultAPI.getRun(id);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                setPost(data);
+                setPost(response);
                 setLoading(false);
             } catch (err) {
                 setError(err.message);

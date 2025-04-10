@@ -22,6 +22,7 @@ export default function ProfilePage() {
     const { id } = router.query;
     const [results, setResults] = useState([]);
     const [user, setUser] = useState(null);
+    const [ownProfile, setOwnProfile] = useState()
 
     useEffect(() => {
         if (!id) return;
@@ -30,14 +31,19 @@ export default function ProfilePage() {
             try {
                 const data = await UsersAPI.getUser(id);
                 const results = await TypingResultAPI.getResults(id);
-                console.log(data);
-                setResults(results);
+                const session = JSON.parse(localStorage.getItem('session'))
+                if (session) {
+                    if (parseInt(id) === session.userId) {
+                        setOwnProfile(true)
+                    }
+                }
+                setResults(results)
                 setUser(data);
             } catch (error) {
                 console.error('Error fetching results:', error);
             }
         };
-
+        
         fetchResults();
     }, [id]);
 
@@ -69,9 +75,11 @@ export default function ProfilePage() {
                     <p>{user.bio || 'No bio available'}</p>
                     <h4>keyboard</h4>
                     <p>{user.keyboard || 'Not specified'}</p>
-                    <Link href={`/profile/edit/${user.id}`}>
-                        <i className="large material-icons">mode_edit</i>
-                    </Link>
+                    {ownProfile === true &&
+                        <Link href={`/profile/edit/${user.id}`}>
+                            <i className="large material-icons">mode_edit</i>
+                        </Link>
+                    }
                 </div>
             </div>
             <div className={styles.bottomContainer}>

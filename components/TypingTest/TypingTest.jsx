@@ -1,16 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import styles from "./TypingTest.module.css";
-import WordsAPI from "../../lib/api/Words.js";
 import TypingResultAPI from "../../lib/api/TypingResult.js";
 import { useGlobalContext } from "../../store/index.js";
-
-let Words = null;
 
 const TypingTest = () => {
     const stopTimer = () => setIsActive(false);
     const startTimer = () => setIsActive(true);
 
-    const { session, login, logout } = useGlobalContext();
+    const { session } = useGlobalContext();
 
     const [wordCount, setWordCount] = useState(10);
     const [wrongChars, setWrongChars] = useState([]);
@@ -18,6 +15,7 @@ const TypingTest = () => {
     const [userLetters, setUserLetters] = useState("");
     const [count, setCount] = useState(0);
     const [isActive, setIsActive] = useState(false);
+    const [testToken, setTestToken] = useState(null);
     const [results, setResults] = useState({
         accuracy: "",
         raw: "",
@@ -34,33 +32,19 @@ const TypingTest = () => {
     const textRef = useRef(null);
     const cursorRef = useRef(null);
 
-    const fetchWordsOnce = async () => {
-        if (Words) return Words;
+    const startTest = async (wordCount) => {
         try {
-            const data = await WordsAPI.getWords();
-            Words = data.map(entry => entry.word);
-            return Words;
+            const response = await TypingResultAPI.startTest(wordCount, session?.accessToken || null);
+            setTestToken(response.token);
+            setDisplayLetters(response.sentence);
         } catch (error) {
-            console.error("Error fetching words:", error);
-            return [];
+            console.error("Error starting test:", error);
+            setDisplayLetters("Error loading test");
         }
-    };
-
-    const generateRandomLetters = async (wordCount) => {
-        const words = await fetchWordsOnce();
-        if (!words.length) return "";
-        let result = "";
-        for (let i = 0; i < wordCount; i++) {
-            const randomIndex = Math.floor(Math.random() * words.length);
-            result += words[randomIndex] + " ";
-        }
-        return result.trim();
     };
 
     useEffect(() => {
-        generateRandomLetters(wordCount).then((result) => {
-            setDisplayLetters(result);
-        });
+        startTest(wordCount); // Run regardless of login state
     }, [wordCount]);
 
     useEffect(() => {
@@ -103,12 +87,11 @@ const TypingTest = () => {
             sentence: "",
             userInput: ""
         });
-        generateRandomLetters(wordCount).then((result) => {
-            setDisplayLetters(result);
-            setUserLetters("");
-            setCount(0);
-            stopTimer();
-        });
+        setUserLetters("");
+        setCount(0);
+        setTestToken(null);
+        stopTimer();
+        startTest(wordCount);
     };
 
     const addLetter = (letter) => {
@@ -116,7 +99,7 @@ const TypingTest = () => {
         setUserLetters(updated);
     };
 
-    const handleFinish = () => {
+    const handleFinish = async () => {
         stopTimer();
         let correct = 0;
         let incorrect = 0;
@@ -158,10 +141,15 @@ const TypingTest = () => {
         setResults(newResults);
         setShowResults(true);
 
-        if (session) {
-            if (acc > 70) {
-                const response = TypingResultAPI.saveResult(newResults, session.accessToken)
+        if (session?.accessToken && acc > 70) {
+            try {
+                await TypingResultAPI.saveResult(newResults, session.accessToken, testToken);
+                console.log("Result saved successfully");
+            } catch (error) {
+                console.error("Error saving result:", error);
             }
+        } else if (!session?.accessToken) {
+            console.log("User not logged in, results not saved");
         }
     };
 
@@ -198,7 +186,7 @@ const TypingTest = () => {
 
     const handleWordAmount = (e) => {
         e.preventDefault();
-        setWordCount(e.target.textContent);
+        setWordCount(Number(e.target.textContent));
         setShowResults(false);
         resetTest();
     };
@@ -212,7 +200,7 @@ const TypingTest = () => {
 
     return (
         <div className={styles.container}>
-            <div className={`${showResults ? styles.showResults : styles.showTyping} ${styles.settingsContainer} `}>
+            <div className={`${showResults ? styles.showResults : styles.showTyping} ${styles.settingsContainer}`}>
                 <div className={styles.settingsIcons}>
                     <p>Words: </p>
                     <p className={styles.settingsClickable} onClick={handleWordAmount}>10</p>
@@ -238,11 +226,12 @@ const TypingTest = () => {
                         })}
                         {!showResults && <div ref={cursorRef} className={styles.cursor}></div>}
                     </div>
-                    {!session &&
+                    {!session?.accessToken && (
                         <div className={styles.infoContainer}>
                             <i className="material-icons">info_outline</i>
-                            <p> You have to be logged in, to save your results! </p>
-                        </div>}
+                            <p>Log in to save your results!</p>
+                        </div>
+                    )}
                 </div>
                 <div className={styles.resultsView}>
                     <div className={styles.displayResult}>
@@ -266,8 +255,7 @@ const TypingTest = () => {
                                                 {char}
                                             </span>
                                         );
-                                    })
-                                    }
+                                    })}
                                 </h2>
                             </div>
                         </div>
