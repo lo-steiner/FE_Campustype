@@ -11,7 +11,7 @@ export default function Leaderboard() {
     const [users, setUsers] = useState([]);
     const [width, setWidth] = useState(0);
     const [selectedWords, setSelectedWords] = useState(10);
-
+    
     const getUsername = () => {
         if (typeof window !== 'undefined') {
             const storedData = localStorage.getItem(STORAGE_KEY);
@@ -75,16 +75,27 @@ export default function Leaderboard() {
 
                             return (
                                 <li
-                                    key={user.id}
-                                    className={username === user.user.username ? styles.currentUser : styles.rangElement}
-                                    onClick={() => typeof window !== 'undefined' && (window.location.href = `/run/${user.id}`)}
+                                  key={user.id}
+                                  className={username === user.user.username ? styles.currentUser : styles.rangElement}
                                 >
-                                    <h2 className={styles.rangTitle}>
-                                        {i + 1} {user.user.username}
-                                    </h2>
-                                    <h3 className={styles.rangStat}>WPM: {user.wpm}</h3>
-                                    {width > 700 && <h3 className={styles.rangStat}>Acc: {user.accuracy}%</h3>}
-                                    {width > 950 && <h3 className={styles.rangStat}>{formattedDate}</h3>}
+                                    <Link href={`/profile/${user.user.id}`}>
+                                        <h2 className={styles.rangTitle}>
+                                            {i + 1} {user.user.username}
+                                        </h2>
+                                    </Link>
+                                    <Link href={`/run/${user.id}`}>
+                                        <h3 className={styles.rangStat}>WPM: {user.wpm}</h3>
+                                    </Link>
+                                    {width > 700 && (
+                                        <Link href={`/run/${user.id}`}>
+                                            <h3 className={styles.rangStat}>Accuracy: {user.accuracy}%</h3>
+                                        </Link>
+                                    )}
+                                    {width > 950 && (
+                                        <Link href={`/run/${user.id}`}>
+                                            <h3 className={styles.rangStat}>{formattedDate}</h3>
+                                        </Link>
+                                    )}
                                 </li>
                             );
                         })}

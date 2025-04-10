@@ -1,0 +1,146 @@
+.formContainerStyling {
+    margin: 20px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.formContainerStyling h1 {
+    margin-bottom: 20px;
+}
+
+.inputField {
+    position: relative;
+    width: 100%;
+    margin-bottom: 2rem;
+    color: black;
+}
+
+.inputField input,
+.inputField textarea {
+    width: 100%;
+    outline: 0;
+    padding: 8px;
+    border: 1px solid #d3d3d3;
+    box-shadow: none;
+    color: #000000;
+    background: transparent;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    resize: vertical; /* Allows vertical resizing of textarea */
+}
+
+.inputField label {
+    position: absolute;
+    top: 8px;
+    left: 4px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: #fdfdfd;
+    color: #d3d3d3;
+    transition: 0.3s all;
+    cursor: text;
+    font-size: 16px;
+}
+
+.inputField input:focus,
+.inputField textarea:focus {
+    border-color: #85B8FF;
+}
+
+.inputField input:focus ~ label,
+.inputField input:not(:placeholder-shown) ~ label,
+.inputField textarea:focus ~ label,
+.inputField textarea:not(:placeholder-shown) ~ label {
+    font-size: 14px;
+    top: -8px;
+    color: #85B8FF;
+}
+
+.inputFieldError {
+    position: relative;
+    width: 100%;
+    margin-bottom: 2rem;
+    color: black;
+}
+
+.inputFieldError input,
+.inputFieldError textarea {
+    width: 100%;
+    outline: 0;
+    padding: 0.5rem 8px;
+    border: 1px solid #d33300;
+    box-shadow: none;
+    color: #000000;
+    background: transparent;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    resize: vertical; /* Allows vertical resizing of textarea */
+}
+
+.inputFieldError label {
+    position: absolute;
+    top: 8px;
+    left: 4px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: #fdfdfd;
+    color: #d33300;
+    transition: 0.3s all;
+    cursor: text;
+    font-size: 16px;
+}
+
+.inputFieldError input:focus,
+.inputFieldError textarea:focus {
+    border-color: #d33300;
+}
+
+.inputFieldError input:focus ~ label,
+.inputFieldError input:not(:placeholder-shown) ~ label,
+.inputFieldError textarea:focus ~ label,
+.inputFieldError textarea:not(:placeholder-shown) ~ label {
+    font-size: 14px;
+    top: -8px;
+    color: #d33300;
+}
+
+.button {
+    background-color: #85B8FF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.button:hover {
+    background-color: #579DFF;
+}
+
+.error {
+    margin-top: -20px;
+    margin-bottom: 30px;
+    color: #d33300;
+    font-size: 0.7rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    .inputField label {
+        background-color: #1e1e1e;
+    }
+    .inputField input,
+    .inputField textarea {
+        color: white;
+    }
+    .inputFieldError input,
+    .inputFieldError textarea {
+        color: white;
+    }
+    .inputFieldError label {
+        background-color: #1e1e1e;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+}
