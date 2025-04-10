@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import TypingResultAPI from '../../../lib/api/TypingResult';
 import UsersAPI from '../../../lib/api/Users';
 import { useGlobalContext } from '../../../store'; // Import global context
 import { toast, Bounce } from 'react-toastify'; // For user feedback
@@ -17,9 +16,9 @@ export default function ProfilePage() {
 
         const fetchResults = async () => {
             try {
-                const data = await TypingResultAPI.getResults(id);
+                const data = await UsersAPI.getUser(id);
                 console.log(data);
-                setUser(data[0].user);
+                setUser(data);
             } catch (error) {
                 console.error('Fehler beim Abrufen der Ergebnisse:', error);
             }
@@ -41,6 +40,7 @@ export default function ProfilePage() {
     };
 
     const saveChanges = async () => {
+
         if (user.password && user.password !== confirmPassword) {
             toast.error("Passwords do not match!", { transition: Bounce });
             return;
@@ -58,13 +58,10 @@ export default function ProfilePage() {
             const response = await UsersAPI.update(user, token);
             console.log("Update response:", response);
 
-            // Assuming the backend returns { user, token }
             const { user: updatedUser, token: newToken } = response;
 
-            // Update local state with the returned user data
             setUser(updatedUser);
 
-            // Manually update localStorage with the new token and user data
             const updatedSession = {
                 accessToken: newToken,
                 username: updatedUser.username,
@@ -73,7 +70,6 @@ export default function ProfilePage() {
             };
             localStorage.setItem("session", JSON.stringify(updatedSession));
 
-            // Update the global context with the new session
             login({ accessToken: newToken });
 
             toast.success("Profile updated successfully!", { transition: Bounce });

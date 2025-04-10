@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import TypingResultAPI from '../../lib/api/TypingResult';
+import UsersAPI from '../../lib/api/Users';
 import styles from './profile.module.css';
 import Link from 'next/Link';
 
@@ -27,11 +28,9 @@ export default function ProfilePage() {
 
         const fetchResults = async () => {
             try {
-                const data = await TypingResultAPI.getResults(id);
-                setResults(data);
-                if (data.length > 0) {
-                    setUser(data[0].user); // Assuming all results belong to the same user
-                }
+                const data = await UsersAPI.getUser(id);
+                console.log(data);
+                setUser(data);
             } catch (error) {
                 console.error('Error fetching results:', error);
             }
@@ -41,7 +40,7 @@ export default function ProfilePage() {
     }, [id]);
 
     if (!user || !results) {
-        return <div>Loading...</div>; // Show loading state until data is fetched
+        return <div>Loading...</div>;
     }
 
     const avgWpm = calculateAverage(results, 'wpm');
