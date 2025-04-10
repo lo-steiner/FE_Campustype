@@ -112,6 +112,13 @@
     gap: 50px;
 }
 
+.loadingPlaceholderText {
+    background-color: #666666;
+    height: 10px;
+    width: 100%;
+    margin: 10px;
+}
+
 @media (prefers-color-scheme: light) {
     .leaderboardContainer {
         background-color: #ffffff;
@@ -259,7 +266,7 @@
     }
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 750px) {
     .rangElement {
         grid-template-columns: repeat(2, 1fr);
     }
