@@ -38,11 +38,6 @@ const NavigationMobile = ({ isOpen, setIsOpen }) => {
 
     return (
         <div className={`${styles.navTab} ${isOpen ? styles.open : ''}`}>
-            <Link href="/" title="HomePage">
-                <div className={`${styles.navTabLinks}`} onClick={handleNavPress}>
-                    <p>Home</p>
-                </div>
-            </Link>
             <Link href="/leaderboard" title="Leaderboard">
                 <div className={styles.navTabLinks} onClick={handleNavPress}>
                     <p>Leaderboard</p>

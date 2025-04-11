@@ -32,9 +32,14 @@ export default function NotFound() {
 
         theater
             .addActor('ErrorMessage', { speed: 1, accuracy: 1 })
-            .addActor('TipMessage', { speed: 1, accuracy: 0.7 });
+            .addActor('TipMessage', { speed: 1, accuracy: 0.7 })
+            .addActor('PageNotFound', { speed: 1, accuracy: 0.7 });
 
-        theater.addScene(`ErrorMessage:${randomErrorMessage}`, 200);
+        theater
+            .addScene('PageNotFound:Page Not Found')
+            .addScene(`ErrorMessage:${randomErrorMessage}`, 200)
+            .addScene('PageNotFound:Press Random Keys to see an easter egg', 2000)
+            .addScene('PageNotFound:Page Not Found');
 
         theater
             .addScene('TipMessage:Tip: Master your keyboard with daily practice.', 5000)
@@ -98,7 +103,7 @@ export default function NotFound() {
                     <div className={styles.title}>404</div>
                 </div>
                 <div>
-                    <div className={styles.errormessage}>Page Not Found</div>
+                    <div id="PageNotFound" className={styles.errormessage}>Page Not Found</div>
                 </div>
                 <div className={styles.actor}>
                     <div id="ErrorMessage" className={`${styles.actor__content} ${styles.message}`}></div>
