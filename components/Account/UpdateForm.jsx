@@ -9,32 +9,10 @@ import styles from './UpdateForm.module.css';
 export default function ProfilePage() {
     const router = useRouter();
     const { id } = router.query;
-    const { session, login } = useGlobalContext();
-    const { session1, logout } = useGlobalContext();
+    const { session, login, logout } = useGlobalContext();
     const [errors, setErrors] = useState({ username: "", email: "", password: "", passwordConfirm: "", bio: "", keyboard: "" });
     const [user, setUser] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState('');
-
-    useEffect(() => {
-        if (!id) return;
-
-        const fetchResults = async () => {
-            const data = await UsersAPI.getUser(id);
-            const session = JSON.parse(localStorage.getItem('session'))
-            if (session) {
-                if (parseInt(id) !== session.userId) {
-                    router.push(`/profile/${id}`)
-                    toast.error("You cant edit other profiles!", { transition: Bounce });
-                }
-            } else {
-                router.push(`/profile/${id}`)
-                toast.error("You must be logged in!", { transition: Bounce });
-            }
-            setUser(data);
-        };
-
-        fetchResults();
-    }, [id]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -51,7 +29,7 @@ export default function ProfilePage() {
     };
 
     const deleteAccount = () => {
-        if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+        if (window.confirm("Are you sure you want to delete your account?")) {
             UsersAPI.deleteUser(id)
                 .then(() => {
                     router.push('/');
@@ -60,7 +38,6 @@ export default function ProfilePage() {
                 })
                 .catch((error) => {
                     toast.error("Failed to delete account. Please try again.");
-                    console.error(error);
                 });
         }
     };
@@ -146,6 +123,27 @@ export default function ProfilePage() {
             toast.error("Failed to update profile.", { transition: Bounce });
         }
     };
+
+    useEffect(() => {
+        if (!id) return;
+
+        const fetchResults = async () => {
+            const data = await UsersAPI.getUser(id);
+            const session = JSON.parse(localStorage.getItem('session'))
+            if (session) {
+                if (parseInt(id) !== session.userId) {
+                    router.push(`/profile/${id}`)
+                    toast.error("You cant edit other profiles!", { transition: Bounce });
+                }
+            } else {
+                router.push(`/profile/${id}`)
+                toast.error("You must be logged in!", { transition: Bounce });
+            }
+            setUser(data);
+        };
+
+        fetchResults();
+    }, [id]);
 
     return user ? (
         <div className={styles.formContainerStyling}>

@@ -6,7 +6,6 @@ import {Bounce, toast} from "react-toastify";
 
 const NavigationMobile = ({ isOpen, setIsOpen }) => {
     const { session, login, logout } = useGlobalContext();
-    const [isClient, setIsClient] = useState(false);
     const [userId, setUserId] = useState(null);
 
     const handleNavPress = () => {
@@ -18,10 +17,6 @@ const NavigationMobile = ({ isOpen, setIsOpen }) => {
         toast.success("Logout successfull!", { transition: Bounce });
         logout();
     };
-
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
 
     useEffect(() => {
         try {

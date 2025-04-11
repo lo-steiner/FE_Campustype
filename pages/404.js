@@ -33,7 +33,7 @@ export default function NotFound() {
         theater
             .addActor('ErrorMessage', { speed: 1, accuracy: 1 })
             .addActor('TipMessage', { speed: 1, accuracy: 0.7 })
-            .addActor('PageNotFound', { speed: 1, accuracy: 0.7 });
+            .addActor('PageNotFound', { speed: 1.2, accuracy: 0.7 });
 
         theater
             .addScene('PageNotFound:Page Not Found')

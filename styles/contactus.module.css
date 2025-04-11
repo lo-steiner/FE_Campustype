@@ -5,7 +5,10 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
-    min-width: 400px; 
+    min-width: 400px;
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 .formContainer {
@@ -145,16 +148,30 @@
     font-size: 0.7rem;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
+    .formContainer h1 {
+        color: black;
+    }
+
     .inputField label,
     .inputFieldError label {
-        background-color: #1E1E1E;
+        background-color: white;
+        color: #dcdcdc;
     }
     .inputField input,
     .inputField textarea,
     .inputFieldError input,
     .inputFieldError textarea {
-        color: white;
+        border: 1px solid #d3d3d3;
+        box-shadow: none;
+        color: black;
+    }
+    .contactUsContainer {
+        color: black;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+
     }
 }
 

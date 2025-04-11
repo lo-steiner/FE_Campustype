@@ -3,6 +3,7 @@ import LeaderboardAPI from "../../lib/api/Leaderboard.js";
 import styles from './Leaderboard.module.css';
 import { hydrateRoot } from "react-dom/client";
 import Link from "next/Link.js";
+import LeaderboardPlaceholder from "./LeaderboardPlaceholders.jsx";
 
 const STORAGE_KEY = 'session';
 
@@ -12,13 +13,11 @@ export default function Leaderboard() {
     const [selectedWords, setSelectedWords] = useState(10);
 
     const getUsername = () => {
-        if (typeof window !== 'undefined') {
             const storedData = localStorage.getItem(STORAGE_KEY);
             if (storedData) {
                 const sessionData = JSON.parse(storedData);
                 return sessionData.username;
             }
-        }
         return null;
     };
 
