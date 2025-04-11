@@ -213,6 +213,7 @@
     }
 
     .leaderboardFilter:hover {
+        background-color: #e5e5e5;
         cursor: pointer;
     }
 
@@ -257,7 +258,6 @@
     }
 
     .leaderboardFilter:hover {
-        background-color: #3a3a3a;
         cursor: pointer;
     }
 

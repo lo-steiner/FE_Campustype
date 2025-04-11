@@ -154,7 +154,9 @@ export default function ProfilePage() {
             </div>
             <div className={styles.bottomContainer}>
                 <ul className={styles.runsContainer}>
-                    {results.map((result, i) => {
+                    {results
+                        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                        .map((result, i) => {
                         const timestamp = result.timestamp;
                         const date = new Date(timestamp);
                         const formattedDate = date.toLocaleString("en-US", {
@@ -167,7 +169,7 @@ export default function ProfilePage() {
                             <li className={styles.runsDisplay} key={result.id} onClick={() => handleRunRoute(result.id)}>
                                 <h3>WPM: {result.wpm}</h3>
                                 <h3>Acc: {result.accuracy}%</h3>
-                                <h3>Time: {result.time} s</h3>
+                                <h3>Time: {result.time} sec</h3>
                                 {width > 700 && (
                                     <h3>{formattedDate}</h3>
                                 )}

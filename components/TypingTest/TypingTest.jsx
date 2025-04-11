@@ -252,7 +252,7 @@ const TypingTest = () => {
                                 <h3>Acc: {results.accuracy}%</h3>
                             </div>
                             <div>
-                                <h2>
+                                <div>
                                     {results.sentence.split("").map((char, i) => {
                                         const userChar = results.userInput[i];
                                         const isCorrect = userChar === char;
@@ -267,7 +267,7 @@ const TypingTest = () => {
                                             </span>
                                         );
                                     })}
-                                </h2>
+                                </div>
                             </div>
                         </div>
                         <div className={styles.bottomResults}>
