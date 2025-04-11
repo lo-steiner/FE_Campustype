@@ -10,6 +10,7 @@ export default function ProfilePage() {
     const router = useRouter();
     const { id } = router.query;
     const { session, login } = useGlobalContext();
+    const { session1, logout } = useGlobalContext();
     const [errors, setErrors] = useState({ username: "", email: "", password: "", passwordConfirm: "", bio: "", keyboard: "" });
     const [user, setUser] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -47,6 +48,21 @@ export default function ProfilePage() {
     const handleConfirmPasswordChange = (e) => {
         setConfirmPassword(e.target.value);
         setErrors({ ...errors, passwordConfirm: "" });
+    };
+
+    const deleteAccount = () => {
+        if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+            UsersAPI.deleteUser(id)
+                .then(() => {
+                    router.push('/');
+                    logout();
+                    toast.success("Your account was deleted!", { transition: Bounce });
+                })
+                .catch((error) => {
+                    toast.error("Failed to delete account. Please try again.");
+                    console.error(error);
+                });
+        }
     };
 
     const validateUser = (user) => {
@@ -207,10 +223,16 @@ export default function ProfilePage() {
                 <label htmlFor="passwordConfirm">Confirm Password</label>
             </div>
             {errors.passwordConfirm && <p className={styles.error}>{errors.passwordConfirm}</p>}
-
-            <button onClick={saveChanges} className={styles.button}>
-                Save Changes
-            </button>
+            <>
+            </>
+            <div className={styles.buttonContainer}>
+                <button onClick={saveChanges} className={styles.button}>
+                    Save Changes
+                </button>
+                <button onClick={deleteAccount} className={styles.button} id={styles.deleteButton}>
+                    Delete Account
+                </button>
+            </div>
         </div>
     ) : null;
 }
