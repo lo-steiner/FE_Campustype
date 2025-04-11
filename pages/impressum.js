@@ -16,7 +16,7 @@ export default function Impressum() {
                     E-Mail: info@campustype.com<br />
                 </p>
                 <p className={styles.text}>
-                    Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.
+                    Die Inhalte unserer Seiten wurden mit grösster Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.
                 </p>
                 <iframe className={styles.iframe} src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d572.4976203961685!2d7.440223232665073!3d46.956327557190185!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x478e391309a50b11%3A0xa737841ff19a9ded!2sICT%20Campus%20Post!5e0!3m2!1sde!2sch!4v1744362558539!5m2!1sde!2sch"  referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>

@@ -5,7 +5,6 @@ import { useGlobalContext } from "../../store/index.js";
 
 const TypingTest = () => {
     const { session } = useGlobalContext();
-
     const [wordCount, setWordCount] = useState(10);
     const [wrongChars, setWrongChars] = useState([]);
     const [displayLetters, setDisplayLetters] = useState("");
@@ -35,7 +34,7 @@ const TypingTest = () => {
             setTestToken(response.token);
             setDisplayLetters(response.sentence);
         } catch (error) {
-            setDisplayLetters("Error loading test");
+            setDisplayLetters("Error while loading test words check your internet connection please");
         }
     };
 
@@ -88,7 +87,6 @@ const TypingTest = () => {
 
     const handleFinish = async () => {
         if (!startTime) {
-            console.error("Test finished without starting timer");
             return;
         }
 
@@ -96,7 +94,7 @@ const TypingTest = () => {
         let incorrect = 0;
         const wrongPositions = [];
 
-        displayLetters.split("").forEach((char, i) => {
+        displayLetters.split("").map((char, i) => {
             if (userLetters[i] === char) {
                 correct += 1;
             } else {
@@ -111,10 +109,10 @@ const TypingTest = () => {
 
         const elapsedTime = (Date.now() - startTime) / 1000;
         const timeInMinutes = elapsedTime / 60;
-        const cpm = Math.round(correct / timeInMinutes) || 0;
-        const accInDec = correct / (incorrect + correct) || 0;
+        const cpm = Math.round(correct / timeInMinutes);
+        const accInDec = correct / (incorrect + correct);
         const acc = Math.round(accInDec * 100);
-        const wpm = Math.round((wordCount / timeInMinutes) * accInDec) || 0;
+        const wpm = Math.round((wordCount / timeInMinutes) * accInDec);
 
         const newResults = {
             accuracy: acc,
@@ -141,7 +139,7 @@ const TypingTest = () => {
                 await TypingResultAPI.saveResult(newResults, session.accessToken, testToken);
             } catch (error) {
                 if (error.response) {
-                    error.response.text().then(text => console.error("Backend error message:", text));
+                    console.log(error.response);
                 }
             }
         } else if (!session?.accessToken) {
@@ -155,7 +153,7 @@ const TypingTest = () => {
             resetTest();
             if (showResults) {
                 setShowResults(false);
-            } else if (results.accuracy !== "") {
+            } else if (results.wpm !== "") {
                 setShowResults(true);
             }
             return;

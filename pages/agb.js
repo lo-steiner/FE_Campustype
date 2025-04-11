@@ -15,7 +15,7 @@ function AGB() {
                         andere Vertriebskanäle abgeschlossen werden.
                     </p>
                     <p className={styles.text}>
-                        Diese AGB gelten ausschließlich. Abweichende, entgegenstehende oder ergänzende AGB des
+                        Diese AGB gelten ausschliesslich. Abweichende, entgegenstehende oder ergänzende AGB des
                         Kunden werden nur dann Vertragsbestandteil, wenn der Anbieter ihrer Geltung ausdrücklich
                         schriftlich zugestimmt hat.
                     </p>
@@ -57,7 +57,7 @@ function AGB() {
                     </p>
                     <p className={styles.text}>
                         Der Kunde kann per Überweisung, Kreditkarte, PayPal oder anderen angebotenen Zahlungsmethoden
-                        zahlen. Der Anbieter behält sich vor, bestimmte Zahlungsmethoden auszuschließen.
+                        zahlen. Der Anbieter behält sich vor, bestimmte Zahlungsmethoden auszuschliessen.
                     </p>
                     <p className={styles.text}>
                         Der Rechnungsbetrag ist innerhalb von 14 Tagen nach Erhalt der Rechnung ohne Abzüge zu
@@ -90,7 +90,7 @@ function AGB() {
                 <section className={styles.section}>
                     <h2 className={styles.subtitle}>5. Widerrufsrecht</h2>
                     <p className={styles.text}>
-                        Verbrauchern im Sinne des § 13 BGB steht ein Widerrufsrecht gemäß § 355 BGB zu. Der Kunde
+                        Verbrauchern im Sinne des § 13 BGB steht ein Widerrufsrecht gemäss § 355 BGB zu. Der Kunde
                         kann seine Vertragserklärung innerhalb von 14 Tagen ohne Angabe von Gründen widerrufen.
                     </p>
                     <p className={styles.text}>
@@ -115,7 +115,7 @@ function AGB() {
                 <section className={styles.section}>
                     <h2 className={styles.subtitle}>6. Gewährleistung und Haftung</h2>
                     <p className={styles.text}>
-                        Es gelten die gesetzlichen Gewährleistungsregelungen gemäß § 434 ff. BGB. Die
+                        Es gelten die gesetzlichen Gewährleistungsregelungen gemäss § 434 ff. BGB. Die
                         Gewährleistungsfrist beträgt zwei Jahre ab Übergabe der Ware.
                     </p>
                     <p className={styles.text}>
@@ -138,11 +138,11 @@ function AGB() {
                 <section className={styles.section}>
                     <h2 className={styles.subtitle}>7. Datenschutz</h2>
                     <p className={styles.text}>
-                        Der Anbieter erhebt, verarbeitet und nutzt personenbezogene Daten des Kunden ausschließlich
+                        Der Anbieter erhebt, verarbeitet und nutzt personenbezogene Daten des Kunden ausschliesslich
                         im Rahmen der geltenden Datenschutzgesetze, insbesondere der DSGVO.
                     </p>
                     <p className={styles.text}>
-                        Einzelheiten zur Datenverarbeitung, einschließlich Zweck, Umfang und Rechtsgrundlage, sind
+                        Einzelheiten zur Datenverarbeitung, einschliesslich Zweck, Umfang und Rechtsgrundlage, sind
                         in der Datenschutzerklärung auf der Webseite einsehbar.
                     </p>
                     <p className={styles.text}>

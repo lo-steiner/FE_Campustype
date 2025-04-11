@@ -23,8 +23,8 @@ const LoginForm = ({ post }) => {
         } else if (user.username.length < 3) {
             newErrors.username = "Username must be at least 3 characters";
             isValid = false;
-        } else if (user.username.length > 50) {
-            newErrors.username = "Username is too long (max 50 characters)";
+        } else if (user.username.length > 20) {
+            newErrors.username = "Username is too long (max 20 characters)";
             isValid = false;
         }
 
@@ -80,10 +80,6 @@ const LoginForm = ({ post }) => {
                 password: user.password,
             });
 
-            if (!loginResponse || typeof loginResponse !== "object") {
-                throw new Error("Login failed: Invalid response format");
-            }
-
             login(loginResponse);
             toast.success("Register successful!", { transition: Bounce });
             router.push("/");
@@ -105,9 +101,8 @@ const LoginForm = ({ post }) => {
                 passwordConfirm: "",
             });
             toast.error(errorMessage, { transition: Bounce });
-        } finally {
-            setIsLoading(false);
         }
+        setIsLoading(false);
     };
 
     const handleChange = (e) => {

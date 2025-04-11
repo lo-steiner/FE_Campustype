@@ -1,14 +1,6 @@
 import RunDetails from '../../components/RunDetails/RunDetails.jsx';
 import TypingResultAPI from '../../lib/api/TypingResult.js';
 
-export default function RunDetailsPage({ post }) {
-    if (!post) return <div>No data available</div>;
-
-    return (
-        <RunDetails props={post} />
-    );
-}
-
 export async function getStaticPaths() {
     try {
 
@@ -53,4 +45,12 @@ export async function getStaticProps({ params }) {
             notFound: true,
         };
     }
+}
+
+export default function RunDetailsPage({ post }) {
+    if (!post) return <div>No data available</div>;
+
+    return (
+        <RunDetails props={post} />
+    );
 }
