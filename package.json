@@ -1,9 +1,9 @@
 {
-  "name": "campus_news",
+  "name": "Campustype",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "homepage": "https://itzzoulei.github.io/campus_news",
+  "homepage": "https://itzzoulei.github.io/FE_Campustype",
   "scripts": {
     "dev": "concurrently --kill-others \"npm run lint-watch\" \"next dev\"",
     "build": "next build",
