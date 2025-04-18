@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import TypingResultAPI from '../../lib/api/TypingResult';
 import UsersAPI from '../../lib/api/Users';
 import styles from './profile.module.css';
-import Link from 'next/Link';
+import Link from 'next/link';
 
 function calculateAverage(array, field) {
     if (!array || array.length === 0) return 0;
