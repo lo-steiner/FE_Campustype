@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import styles from "../TypingTest/TypingTest.module.css";
 import TypingResultAPI from "../../lib/api/TypingResult.js";
 import { useGlobalContext } from "../../store/index.js";
-import {router} from "next/client";
 
 const TypingTest = () => {
     const { session } = useGlobalContext();

@@ -147,6 +147,9 @@
         cursor: pointer;
         background-color: #85B8FF;
     }
+    .runsContainer {
+        background-color: white;
+    }
 }
 
 @media only screen and (max-width: 980px) {
@@ -185,7 +188,6 @@
         width: 100%;
         padding: 0;
         border-radius: 12px;
-        background-color: white;
     }
 }
 
