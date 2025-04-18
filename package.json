@@ -3,13 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "homepage": "https://itzzoulei.github.io/campus_news",
   "scripts": {
     "dev": "concurrently --kill-others \"npm run lint-watch\" \"next dev\"",
-    "build": "concurrently --kill-others \"npm run lint-watch\" \"next build\"",
-    "start": "concurrently --kill-others \"npm run lint-watch\" \"next start\"",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
     "lint-watch": "nodemon --watch . --exec next lint",
-    "cypress:open": "cypress:open"
+    "cypress:open": "cypress:open",
+    "export": "next build && next export",
+    "predeploy": "npm run export",
+    "deploy": "gh-pages -d out --nojekyll"
   },
   "dependencies": {
     "jwt-decode": "^4.0.0",
@@ -25,6 +29,7 @@
     "concurrently": "^9.1.2",
     "cypress": "^14.2.1",
     "eslint": "^9.23.0",
-    "eslint-config-next": "15.2.4"
+    "eslint-config-next": "15.2.4",
+    "gh-pages": "^6.3.0"
   }
 }
