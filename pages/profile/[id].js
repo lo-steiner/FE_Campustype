@@ -110,16 +110,40 @@ export default function ProfilePage() {
         <div className={styles.body}>
             <div className={styles.topContainer}>
                 <div className={styles.mobileContainer}>
-                    <div className={styles.profileContainer}>
-                        <img src="https://placehold.co/200x200?text=Campus+Type" alt="Campus Type" />
-                        <div className={styles.profileStats}>
-                            <h2>{user.username}</h2>
-                            <h4>tests completed</h4>
-                            <h3>{results.length}</h3>
-                            <h4>time typing</h4>
-                            <h3>{timePlayed} sec</h3>
-                        </div>
+                    {width > 980 ? (
+                        <div className={styles.profileContainer}>
+                    <img src="https://placehold.co/200x200?text=Campus+Type" alt="Campus Type" />
+                    <div className={styles.profileStats}>
+                        <h2>{user.username}</h2>
+                        <h4>tests completed</h4>
+                        <h3>{results.length}</h3>
+                        <h4>time typing</h4>
+                        <h3>{timePlayed} sec</h3>
                     </div>
+                </div>
+                    ) : (
+                        <div className={styles.profileContainer}>
+                            <img src="https://placehold.co/200x200?text=Campus+Type" alt="Campus Type" />
+                            <div className={styles.editProfile}>
+                                <h2>{user.username}</h2>
+                                {ownProfile === true && (
+                                    <Link href={`/profile/edit/${user.id}`}>
+                                        <i className="large material-icons">mode_edit</i>
+                                    </Link>
+                                )}
+                            </div>
+                            <div className={styles.profileStats}>
+                                <div>
+                                <h4>tests completed</h4>
+                                <h3>{results.length}</h3>
+                                </div>
+                                <div>
+                                <h4>time typing</h4>
+                                <h3>{timePlayed} sec</h3>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <div id={styles.seperator}></div>
                 <div className={styles.mobileContainer}>
@@ -128,11 +152,6 @@ export default function ProfilePage() {
                         <p>{user.bio || 'No bio available'}</p>
                         <h4>keyboard</h4>
                         <p>{user.keyboard || 'Not specified'}</p>
-                        {ownProfile === true && (
-                            <Link href={`/profile/edit/${user.id}`}>
-                                <i className="large material-icons">mode_edit</i>
-                            </Link>
-                        )}
                     </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import LeaderboardAPI from "../../lib/api/Leaderboard.js";
 import styles from './RunDetails.module.css'
-import Link from 'next/Link'
+import Link from 'next/link'
 
 
 

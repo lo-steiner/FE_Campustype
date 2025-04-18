@@ -12,21 +12,18 @@
     padding: 20px;
     border-radius: 12px;
     background-color: #1a1a1a;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 
 #seperator {
+    margin: 0 30px;
     padding: 0;
     max-width: 12px;
     min-width: 12px;
     height: 100%;
     border-radius: 4px;
     background-color: #242424;
-}
-
-.rightContainer {
-    padding-left: 20px;
 }
 
 .rightContainer h4 {
@@ -51,7 +48,6 @@
 
 .profileContainer {
     display: flex;
-    flex-direction: row;
     align-items: center;
 }
 
@@ -104,6 +100,10 @@
 
 .runsContainer {
     width: 100%;
+    padding: 0 10px;
+    border-radius: 12px;
+    background-color: #1a1a1a;
+    justify-content: space-between;
 }
 
 .runsDisplay {
@@ -150,6 +150,26 @@
 }
 
 @media only screen and (max-width: 980px) {
+    .profileContainer {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .editProfile {
+        margin-top: 30px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .profileStats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        text-align: center;
+        padding: 0;
+    }
+
     .topContainer {
         display: grid;
         grid-template-columns: repeat(1, 1fr);
@@ -159,6 +179,13 @@
         justify-content: center;
         align-items: center;
         align-content: center;
+        width: 100%;
+    }
+    .runsContainer {
+        width: 100%;
+        padding: 0;
+        border-radius: 12px;
+        background-color: white;
     }
 }
 

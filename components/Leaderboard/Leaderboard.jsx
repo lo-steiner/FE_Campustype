@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import LeaderboardAPI from "../../lib/api/Leaderboard.js";
 import styles from './Leaderboard.module.css';
 import { hydrateRoot } from "react-dom/client";
-import Link from "next/Link.js";
+import Link from "next/link";
 import LeaderboardPlaceholder from "./LeaderboardPlaceholders.jsx";
 
 const STORAGE_KEY = 'session';
@@ -51,6 +51,12 @@ export default function Leaderboard() {
                 <div className={styles.mainFilter}>
                     <p className={`${styles.leaderboardFilter} ${selectedWords === null ? styles.activeFilter : ''}`}
                        onClick={() => handleLeaderboardChange(null)}>All time</p>
+                </div>
+                <div className={styles.dayFilter}>
+                    <p className={`${styles.leaderboardFilter} ${selectedWords === null ? styles.activeFilter : ''}`}
+                       onClick={() => handleLeaderboardChange(null)}>Daily</p>
+                    <p className={`${styles.leaderboardFilter} ${selectedWords === null ? styles.activeFilter : ''}`}
+                       onClick={() => handleLeaderboardChange(null)}>Weekly</p>
                 </div>
                 <div className={styles.subFilter}>
                     <p className={`${styles.leaderboardFilter} ${selectedWords === 10 ? styles.activeFilter : ''}`}
