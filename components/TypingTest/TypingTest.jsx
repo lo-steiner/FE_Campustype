@@ -12,9 +12,7 @@ const TypingTest = () => {
     const [userLetters, setUserLetters] = useState("");
     const [testToken, setTestToken] = useState(null);
     const [startTime, setStartTime] = useState(null);
-    const [nextSentence, setNextSentence] = useState(() => {
-        return localStorage.getItem(`nextSentence_${wordCount}`) || "";
-    });
+    const [nextSentence, setNextSentence] = useState("");
     const [results, setResults] = useState({
         accuracy: "",
         raw: "",
@@ -32,15 +30,26 @@ const TypingTest = () => {
     const cursorRef = useRef(null);
     const inputRef = useRef(null);
 
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const savedSentence = localStorage.getItem(`nextSentence_${wordCount}`) || "";
+            setNextSentence(savedSentence);
+        }
+    }, [wordCount]);
+
     const prefetchSentence = async (wordCount) => {
         try {
             const response = await TypingResultAPI.startTest(wordCount, session?.accessToken || null);
             const sentence = response.sentence;
             setNextSentence(sentence);
-            localStorage.setItem(`nextSentence_${wordCount}`, sentence);
+            if (typeof window !== 'undefined') {
+                localStorage.setItem(`nextSentence_${wordCount}`, sentence);
+            }
         } catch (error) {
             setNextSentence("");
-            localStorage.removeItem(`nextSentence_${wordCount}`);
+            if (typeof window !== 'undefined') {
+                localStorage.removeItem(`nextSentence_${wordCount}`);
+            }
         }
     };
 
@@ -48,7 +57,9 @@ const TypingTest = () => {
         if (nextSentence) {
             setDisplayLetters(nextSentence);
             setNextSentence("");
-            localStorage.removeItem(`nextSentence_${wordCount}`);
+            if (typeof window !== 'undefined') {
+                localStorage.removeItem(`nextSentence_${wordCount}`);
+            }
             prefetchSentence(wordCount);
         } else {
             try {
@@ -102,7 +113,8 @@ const TypingTest = () => {
     };
 
     const generateTestTokenAsync = async () => {
-        setStartTime(Date.now());
+        const localStartTime = Date.now();
+        setStartTime(localStartTime);
         if (!session?.accessToken) {
             return;
         }
@@ -148,9 +160,10 @@ const TypingTest = () => {
         });
 
         const elapsedTime = (Date.now() - startTime) / 1000; // seconds
-        // Validate elapsedTime: must be positive and reasonable (0.5s to 10min)
-        if (elapsedTime <= 0.5 || elapsedTime > 600) {
-            alert("Invalid test duration detected. Please try again.");
+        // Validate elapsedTime: must be reasonable (2s minimum for 10 words, 10min max)
+        const minTime = Math.max(2, wordCount * 0.2); // ~300 WPM max (1 word per 0.2s)
+        if (elapsedTime < minTime || elapsedTime > 600) {
+            alert(`Invalid test duration (${elapsedTime.toFixed(2)}s). Expected at least ${minTime}s for ${wordCount} words. Please try again.`);
             resetTest();
             return;
         }
