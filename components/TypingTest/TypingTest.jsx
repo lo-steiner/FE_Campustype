@@ -12,6 +12,9 @@ const TypingTest = () => {
     const [userLetters, setUserLetters] = useState("");
     const [testToken, setTestToken] = useState(null);
     const [startTime, setStartTime] = useState(null);
+    const [nextSentence, setNextSentence] = useState(() => {
+        return localStorage.getItem(`nextSentence_${wordCount}`) || "";
+    });
     const [results, setResults] = useState({
         accuracy: "",
         raw: "",
@@ -29,12 +32,32 @@ const TypingTest = () => {
     const cursorRef = useRef(null);
     const inputRef = useRef(null);
 
-    const startTest = async (wordCount) => {
+    const prefetchSentence = async (wordCount) => {
         try {
             const response = await TypingResultAPI.startTest(wordCount, session?.accessToken || null);
-            setDisplayLetters(response.sentence);
+            const sentence = response.sentence;
+            setNextSentence(sentence);
+            localStorage.setItem(`nextSentence_${wordCount}`, sentence);
         } catch (error) {
-            setDisplayLetters("Error while loading test words, please check your internet connection");
+            setNextSentence("");
+            localStorage.removeItem(`nextSentence_${wordCount}`);
+        }
+    };
+
+    const startTest = async (wordCount) => {
+        if (nextSentence) {
+            setDisplayLetters(nextSentence);
+            setNextSentence("");
+            localStorage.removeItem(`nextSentence_${wordCount}`);
+            prefetchSentence(wordCount);
+        } else {
+            try {
+                const response = await TypingResultAPI.startTest(wordCount, session?.accessToken || null);
+                setDisplayLetters(response.sentence);
+                prefetchSentence(wordCount);
+            } catch (error) {
+                setDisplayLetters("Error while loading test words, please check your internet connection");
+            }
         }
     };
 
@@ -45,7 +68,8 @@ const TypingTest = () => {
 
     const handleWordAmount = (e) => {
         e.preventDefault();
-        setWordCount(Number(e.target.textContent));
+        const newWordCount = Number(e.target.textContent);
+        setWordCount(newWordCount);
         setShowResults(false);
         resetTest();
     };
@@ -78,8 +102,8 @@ const TypingTest = () => {
     };
 
     const generateTestTokenAsync = async () => {
+        setStartTime(Date.now());
         if (!session?.accessToken) {
-            setStartTime(Date.now());
             return;
         }
         try {
@@ -88,9 +112,8 @@ const TypingTest = () => {
                 session.accessToken
             );
             setTestToken(response.token);
-            setStartTime(response.startTime);
         } catch (error) {
-            setStartTime(Date.now());
+            alert("Failed to generate test token: " + (error.response?.data || error.message));
         }
     };
 
@@ -124,7 +147,14 @@ const TypingTest = () => {
             }
         });
 
-        const elapsedTime = (Date.now() - startTime) / 1000;
+        const elapsedTime = (Date.now() - startTime) / 1000; // seconds
+        // Validate elapsedTime: must be positive and reasonable (0.5s to 10min)
+        if (elapsedTime <= 0.5 || elapsedTime > 600) {
+            alert("Invalid test duration detected. Please try again.");
+            resetTest();
+            return;
+        }
+
         const timeInMinutes = elapsedTime / 60;
         const cpm = Math.round(correct / timeInMinutes);
         const accInDec = correct / (incorrect + correct);
@@ -148,17 +178,14 @@ const TypingTest = () => {
         setResults(newResults);
         setShowResults(true);
 
+        prefetchSentence(wordCount);
+
         if (session?.accessToken && acc > 70 && testToken) {
             try {
-                console.log("Saving result with testToken:", testToken);
                 await TypingResultAPI.saveResult(newResults, session.accessToken, testToken);
             } catch (error) {
-                console.error("Error saving result:", error);
-                const errorMessage = error.response?.data || error.message;
-                alert("Failed to save results: " + errorMessage);
+                alert("Failed to save results: " + (error.response?.data || error.message));
             }
-        } else if (!session?.accessToken) {
-            console.log("User not logged in, results not saved");
         }
     };
 
@@ -197,7 +224,6 @@ const TypingTest = () => {
     }, []);
 
     useEffect(() => {
-        console.log("Session:", session);
         startTest(wordCount);
     }, [wordCount]);
 
@@ -264,7 +290,7 @@ const TypingTest = () => {
                     {!session?.accessToken && (
                         <div className={styles.infoContainer}>
                             <i className="material-icons">info_outline</i>
-                            <p> Log in to save your results!</p>
+                            <p>Log in to save your results!</p>
                         </div>
                     )}
                 </div>
