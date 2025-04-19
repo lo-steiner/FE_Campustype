@@ -43,7 +43,7 @@ export default function Leaderboard({props}) {
                         <div className={styles.bottomResults}>
                             <h3>Raw: {results.raw}</h3>
                             <h3>CPM: {results.cpm}</h3>
-                            <h3>Time: {results.time}</h3>
+                            <h3>{results.time} sec</h3>
                             <h3>Words: {results.words}</h3>
                         </div>
                         <div className={styles.returnIcons}>

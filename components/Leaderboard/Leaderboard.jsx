@@ -57,11 +57,11 @@ export default function Leaderboard({ loadUsers }) {
                 </div>
                 <div className={styles.dayFilter}>
                     <p className={`${styles.leaderboardFilter} ${selectedWords === null ? styles.activeFilter : ''}`}
-                        onClick={() => handleLeaderboardChange(null)}>
+                        onClick={() => handleLeaderboardChange('daily')}>
                         Daily
                     </p>
                     <p className={`${styles.leaderboardFilter} ${selectedWords === null ? styles.activeFilter : ''}`}
-                        onClick={() => handleLeaderboardChange(null)}>
+                        onClick={() => handleLeaderboardChange('weekly')}>
                         Weekly
                     </p>
                 </div>

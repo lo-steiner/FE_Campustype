@@ -188,7 +188,7 @@ export default function ProfilePage() {
                             <li className={styles.runsDisplay} key={result.id} onClick={() => handleRunRoute(result.id)}>
                                 <h3>WPM: {result.wpm}</h3>
                                 <h3>Acc: {result.accuracy}%</h3>
-                                <h3>Time: {result.time} sec</h3>
+                                <h3>{result.time} sec</h3>
                                 {width > 700 && (
                                     <h3>{formattedDate}</h3>
                                 )}

@@ -84,7 +84,7 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     background-color: #1a1a1a;
     border-radius: 20px;
-    max-height: 210px;
+    max-height: 310px;
 }
 
 .leaderboardFilter {
@@ -202,7 +202,7 @@
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         background-color: #fdfdfd;
         border-radius: 20px;
-        max-height: 210px;
+        max-height: 310px;
     }
 
     .leaderboardFilter {

@@ -6,6 +6,7 @@ import { useGlobalContext } from "../../store/index.js";
 const TypingTest = () => {
     const { session } = useGlobalContext();
     const [wordCount, setWordCount] = useState(10);
+    const [width, setWidth] = useState(0);
     const [wrongChars, setWrongChars] = useState([]);
     const [displayLetters, setDisplayLetters] = useState("");
     const [userLetters, setUserLetters] = useState("");
@@ -31,10 +32,9 @@ const TypingTest = () => {
     const startTest = async (wordCount) => {
         try {
             const response = await TypingResultAPI.startTest(wordCount, session?.accessToken || null);
-            setTestToken(response.token);
             setDisplayLetters(response.sentence);
         } catch (error) {
-            setDisplayLetters("Error while loading test words check your internet connection please");
+            setDisplayLetters("Error while loading test words, please check your internet connection");
         }
     };
 
@@ -77,9 +77,26 @@ const TypingTest = () => {
         }
     };
 
+    const generateTestTokenAsync = async () => {
+        if (!session?.accessToken) {
+            setStartTime(Date.now());
+            return;
+        }
+        try {
+            const response = await TypingResultAPI.generateTestToken(
+                { sentence: displayLetters },
+                session.accessToken
+            );
+            setTestToken(response.token);
+            setStartTime(response.startTime);
+        } catch (error) {
+            setStartTime(Date.now());
+        }
+    };
+
     const addLetter = (letter) => {
         if (userLetters.length === 0 && !startTime) {
-            setStartTime(Date.now());
+            generateTestTokenAsync();
         }
         const updated = userLetters + letter;
         setUserLetters(updated);
@@ -131,16 +148,14 @@ const TypingTest = () => {
         setResults(newResults);
         setShowResults(true);
 
-        if (session?.accessToken && acc > 70) {
-            if (!testToken) {
-                return;
-            }
+        if (session?.accessToken && acc > 70 && testToken) {
             try {
+                console.log("Saving result with testToken:", testToken);
                 await TypingResultAPI.saveResult(newResults, session.accessToken, testToken);
             } catch (error) {
-                if (error.response) {
-                    console.log(error.response);
-                }
+                console.error("Error saving result:", error);
+                const errorMessage = error.response?.data || error.message;
+                alert("Failed to save results: " + errorMessage);
             }
         } else if (!session?.accessToken) {
             console.log("User not logged in, results not saved");
@@ -172,6 +187,17 @@ const TypingTest = () => {
     };
 
     useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setWidth(window.innerWidth);
+        }
+
+        const handleResize = () => setWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    useEffect(() => {
+        console.log("Session:", session);
         startTest(wordCount);
     }, [wordCount]);
 
@@ -193,7 +219,7 @@ const TypingTest = () => {
             cursorRef.current.style.top = `${rect.top - containerRect.top}px`;
             cursorRef.current.style.height = `${rect.height}px`;
         }
-    }, [userLetters, displayLetters, showResults]);
+    }, [userLetters, displayLetters, showResults, width]);
 
     useEffect(() => {
         document.addEventListener("keydown", handleKeyDown);
@@ -238,7 +264,7 @@ const TypingTest = () => {
                     {!session?.accessToken && (
                         <div className={styles.infoContainer}>
                             <i className="material-icons">info_outline</i>
-                            <p>Log in to save your results!</p>
+                            <p> Log in to save your results!</p>
                         </div>
                     )}
                 </div>
@@ -271,7 +297,7 @@ const TypingTest = () => {
                         <div className={styles.bottomResults}>
                             <h3>Raw: {results.raw}</h3>
                             <h3>CPM: {results.cpm}</h3>
-                            <h3>Time: {results.time}</h3>
+                            <h3>{results.time} sec</h3>
                             <h3>Words: {results.words}</h3>
                         </div>
                         <div className={styles.returnIcons}>
