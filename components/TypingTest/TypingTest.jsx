@@ -118,15 +118,10 @@ const TypingTest = () => {
         if (!session?.accessToken) {
             return;
         }
-        try {
-            const response = await TypingResultAPI.generateTestToken(
-                { sentence: displayLetters },
-                session.accessToken
-            );
-            setTestToken(response.token);
-        } catch (error) {
-            alert("Failed to generate test token: " + (error.response?.data || error.message));
-        }
+            await TypingResultAPI.generateTestToken(
+            { sentence: displayLetters },
+            session.accessToken
+        );
     };
 
     const addLetter = (letter) => {
@@ -159,15 +154,7 @@ const TypingTest = () => {
             }
         });
 
-        const elapsedTime = (Date.now() - startTime) / 1000; // seconds
-        // Validate elapsedTime: must be reasonable (2s minimum for 10 words, 10min max)
-        const minTime = Math.max(2, wordCount * 0.2); // ~300 WPM max (1 word per 0.2s)
-        if (elapsedTime < minTime || elapsedTime > 600) {
-            alert(`Invalid test duration (${elapsedTime.toFixed(2)}s). Expected at least ${minTime}s for ${wordCount} words. Please try again.`);
-            resetTest();
-            return;
-        }
-
+        const elapsedTime = (Date.now() - startTime) / 1000;
         const timeInMinutes = elapsedTime / 60;
         const cpm = Math.round(correct / timeInMinutes);
         const accInDec = correct / (incorrect + correct);
@@ -194,11 +181,7 @@ const TypingTest = () => {
         prefetchSentence(wordCount);
 
         if (session?.accessToken && acc > 70 && testToken) {
-            try {
-                await TypingResultAPI.saveResult(newResults, session.accessToken, testToken);
-            } catch (error) {
-                alert("Failed to save results: " + (error.response?.data || error.message));
-            }
+            await TypingResultAPI.saveResult(newResults, session.accessToken, testToken);
         }
     };
 
