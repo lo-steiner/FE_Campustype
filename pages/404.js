@@ -1,4 +1,3 @@
-// pages/404.js
 import { useEffect } from 'react';
 import TheaterJS from 'theaterjs';
 import styles from '../styles/404.module.css';

@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import LeaderboardAPI from "../../lib/api/Leaderboard.js";
 import styles from './Leaderboard.module.css';
 import Link from "next/link";
-import LeaderboardPlaceholder from "./LeaderboardPlaceholders.jsx";
 
 const STORAGE_KEY = 'session';
 
 export default function Leaderboard({ loadUsers }) {
     const [users, setUsers] = useState(loadUsers || []);
     const [width, setWidth] = useState(0);
-    const [selectedWords, setSelectedWords] = useState(10);
+    const [selectedFilter, setSelectedFilter] = useState({ type: 'words', value: 10 }); // Single filter state
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const getUsername = () => {
         if (typeof window !== 'undefined') {
@@ -22,25 +23,32 @@ export default function Leaderboard({ loadUsers }) {
         return null;
     };
 
-    const handleLeaderboardChange = async (words) => {
+    const handleLeaderboardChange = async (type, value) => {
+        setIsLoading(true);
+        setError(null);
         try {
-            const response = await LeaderboardAPI.getUsers(words);
+            const response = await LeaderboardAPI.getUsers(
+                type === 'words' ? value : null,
+                type === 'timestamp' ? value : null
+            );
             setUsers(response);
-            setSelectedWords(words);
+            setSelectedFilter({ type, value });
         } catch (error) {
-            console.error("Failed to load leaderboard");
+            console.error("Failed to load leaderboard:", error);
+            setError("Failed to load leaderboard. Please try again.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
     useEffect(() => {
-        handleLeaderboardChange(10);
+        handleLeaderboardChange('words', 10); // Initial load: Words 10
     }, []);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
             setWidth(window.innerWidth);
         }
-
         const handleResize = () => setWidth(window.innerWidth);
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
@@ -50,39 +58,54 @@ export default function Leaderboard({ loadUsers }) {
         <div className={styles.containerLeaderboard}>
             <div className={styles.filterContainer}>
                 <div className={styles.mainFilter}>
-                    <p className={`${styles.leaderboardFilter} ${selectedWords === null ? styles.activeFilter : ''}`}
-                        onClick={() => handleLeaderboardChange(null)}>
+                    <p
+                        className={`${styles.leaderboardFilter} ${selectedFilter.type === 'timestamp' && selectedFilter.value === null ? styles.activeFilter : ''}`}
+                        onClick={() => handleLeaderboardChange('timestamp', null)}
+                    >
                         All time
                     </p>
                 </div>
                 <div className={styles.dayFilter}>
-                    <p className={`${styles.leaderboardFilter} ${selectedWords === null ? styles.activeFilter : ''}`}
-                        onClick={() => handleLeaderboardChange('daily')}>
+                    <p
+                        className={`${styles.leaderboardFilter} ${selectedFilter.type === 'timestamp' && selectedFilter.value === 'daily' ? styles.activeFilter : ''}`}
+                        onClick={() => handleLeaderboardChange('timestamp', 'daily')}
+                    >
                         Daily
                     </p>
-                    <p className={`${styles.leaderboardFilter} ${selectedWords === null ? styles.activeFilter : ''}`}
-                        onClick={() => handleLeaderboardChange('weekly')}>
+                    <p
+                        className={`${styles.leaderboardFilter} ${selectedFilter.type === 'timestamp' && selectedFilter.value === 'weekly' ? styles.activeFilter : ''}`}
+                        onClick={() => handleLeaderboardChange('timestamp', 'weekly')}
+                    >
                         Weekly
                     </p>
                 </div>
                 <div className={styles.subFilter}>
-                    <p className={`${styles.leaderboardFilter} ${selectedWords === 10 ? styles.activeFilter : ''}`}
-                        onClick={() => handleLeaderboardChange(10)}>
+                    <p
+                        className={`${styles.leaderboardFilter} ${selectedFilter.type === 'words' && selectedFilter.value === 10 ? styles.activeFilter : ''}`}
+                        onClick={() => handleLeaderboardChange('words', 10)}
+                    >
                         Words 10
                     </p>
-                    <p className={`${styles.leaderboardFilter} ${selectedWords === 15 ? styles.activeFilter : ''}`}
-                        onClick={() => handleLeaderboardChange(15)}>
+                    <p
+                        className={`${styles.leaderboardFilter} ${selectedFilter.type === 'words' && selectedFilter.value === 15 ? styles.activeFilter : ''}`}
+                        onClick={() => handleLeaderboardChange('words', 15)}
+                    >
                         Words 15
                     </p>
-                    <p className={`${styles.leaderboardFilter} ${selectedWords === 20 ? styles.activeFilter : ''}`}
-                        onClick={() => handleLeaderboardChange(20)}>
+                    <p
+                        className={`${styles.leaderboardFilter} ${selectedFilter.type === 'words' && selectedFilter.value === 20 ? styles.activeFilter : ''}`}
+                        onClick={() => handleLeaderboardChange('words', 20)}
+                    >
                         Words 20
                     </p>
                 </div>
             </div>
             <div className={styles.leaderboardContainer}>
                 <h1 className={styles.leaderboardTitle}>LEADERBOARD</h1>
-                {users.length > 0 ? (
+                {error && <div className={styles.error}>{error}</div>}
+                {isLoading ? (
+                    <div>Loading...</div>
+                ) : users.length > 0 ? (
                     <ul className={styles.leaderboardList}>
                         {users.map((user, i) => {
                             const username = getUsername();
@@ -122,28 +145,9 @@ export default function Leaderboard({ loadUsers }) {
                         })}
                     </ul>
                 ) : (
-                    <ul className={styles.leaderboardList}>
-                        <li>Loading Content</li>
-                    </ul>
+                    <div>No results found</div>
                 )}
             </div>
         </div>
     );
-}
-
-export async function getServerSideProps() {
-    try {
-        const users = await LeaderboardAPI.getUsers(10);
-        return {
-            props: {
-                users: users,
-            },
-        };
-    } catch (error) {
-        return {
-            props: {
-                users: [],
-            },
-        };
-    }
 }

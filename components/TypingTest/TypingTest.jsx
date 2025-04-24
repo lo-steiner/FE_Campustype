@@ -46,6 +46,7 @@ const TypingTest = () => {
                 localStorage.setItem(`nextSentence_${wordCount}`, sentence);
             }
         } catch (error) {
+            console.error("Error prefetching sentence:", error);
             setNextSentence("");
             if (typeof window !== 'undefined') {
                 localStorage.removeItem(`nextSentence_${wordCount}`);
@@ -67,6 +68,7 @@ const TypingTest = () => {
                 setDisplayLetters(response.sentence);
                 prefetchSentence(wordCount);
             } catch (error) {
+                console.error("Error starting test:", error);
                 setDisplayLetters("Error while loading test words, please check your internet connection");
             }
         }
@@ -116,12 +118,21 @@ const TypingTest = () => {
         const localStartTime = Date.now();
         setStartTime(localStartTime);
         if (!session?.accessToken) {
+            console.log("No access token, skipping token generation");
             return;
         }
-            await TypingResultAPI.generateTestToken(
-            { sentence: displayLetters },
-            session.accessToken
-        );
+        try {
+            const response = await TypingResultAPI.generateTestToken(
+                { sentence: displayLetters },
+                session.accessToken
+            );
+            setTestToken(response.token);
+            console.log("Test token set:", response.token);
+            return response.token;
+        } catch (error) {
+            console.error("Error generating test token:", error);
+            return null;
+        }
     };
 
     const addLetter = (letter) => {
@@ -134,6 +145,7 @@ const TypingTest = () => {
 
     const handleFinish = async () => {
         if (!startTime) {
+            console.log("No start time, cannot finish test");
             return;
         }
 
@@ -161,6 +173,8 @@ const TypingTest = () => {
         const acc = Math.round(accInDec * 100);
         const wpm = Math.round((wordCount / timeInMinutes) * accInDec);
 
+        console.log("Calculated accuracy:", acc, "Correct:", correct, "Incorrect:", incorrect);
+
         const newResults = {
             accuracy: acc,
             raw: Math.round(wordCount / timeInMinutes),
@@ -180,8 +194,16 @@ const TypingTest = () => {
 
         prefetchSentence(wordCount);
 
-        if (session?.accessToken && acc > 70 && testToken) {
-            await TypingResultAPI.saveResult(newResults, session.accessToken, testToken);
+        if (session?.accessToken && acc >= 0 && testToken) {
+            console.log("Saving result:", newResults, "Token:", testToken);
+            try {
+                await TypingResultAPI.saveResult(newResults, session.accessToken, testToken);
+                console.log("Result saved successfully");
+            } catch (error) {
+                console.error("Error saving result:", error);
+            }
+        } else {
+            console.log("Save skipped:", { accessToken: !!session?.accessToken, acc, testToken });
         }
     };
 
