@@ -194,7 +194,7 @@ const TypingTest = () => {
 
         prefetchSentence(wordCount);
 
-        if (session?.accessToken && acc >= 0 && testToken) {
+        if (session?.accessToken && acc >= 70 && testToken) {
             console.log("Saving result:", newResults, "Token:", testToken);
             try {
                 await TypingResultAPI.saveResult(newResults, session.accessToken, testToken);
