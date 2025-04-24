@@ -81,6 +81,10 @@ const TypingTest = () => {
 
     const handleWordAmount = (e) => {
         e.preventDefault();
+        setNextSentence("");
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem(`nextSentence_${wordCount}`);
+        }
         const newWordCount = Number(e.target.textContent);
         setWordCount(newWordCount);
         setShowResults(false);
